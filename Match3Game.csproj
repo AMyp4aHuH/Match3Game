@@ -41,15 +41,59 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Game1.cs" />
+    <Compile Include="Common\Direction.cs" />
+    <Compile Include="Common\GameAnalytics.cs" />
+    <Compile Include="Common\MouseClickDetector.cs" />
+    <Compile Include="MatchThreeGame.cs" />
+    <Compile Include="Matrix\DefaultTileFactory.cs" />
+    <Compile Include="Matrix\Destroyers\DestroyerState.cs" />
+    <Compile Include="Matrix\PositionHelper.cs" />
+    <Compile Include="Matrix\Matrix.Match.cs" />
+    <Compile Include="Matrix\Destroyers\DefaultDestroyers\BlackDestroyer.cs" />
+    <Compile Include="Matrix\MatrixStates\Matrix.EmptyState.cs" />
+    <Compile Include="Matrix\Tiles\DefaultTiles\BlueTile.cs" />
+    <Compile Include="Matrix\Tiles\DefaultTiles\GreenTile.cs" />
+    <Compile Include="Matrix\Tiles\DefaultTiles\PinkTile.cs" />
+    <Compile Include="Matrix\Tiles\DefaultTiles\PurpleTile.cs" />
+    <Compile Include="Matrix\Tiles\TileFactory.cs" />
+    <Compile Include="Matrix\Tiles\DefaultTiles\YellowTile.cs" />
+    <Compile Include="Scenes\StartScene.cs" />
+    <Compile Include="View\Button.cs" />
+    <Compile Include="Interfaces\IGameElement.cs" />
+    <Compile Include="Matrix\Cell.cs" />
+    <Compile Include="Matrix\Destroyers\Destroyer.cs" />
+    <Compile Include="Matrix\Destroyers\LineDestroyers.cs" />
+    <Compile Include="Matrix\Matrix.cs" />
+    <Compile Include="Matrix\MatrixStates\Matrix.DestroyState.cs" />
+    <Compile Include="Matrix\MatrixStates\Matrix.IdleState.cs" />
+    <Compile Include="Matrix\MatrixStates\Matrix.SwapState.cs" />
+    <Compile Include="Matrix\MatrixStates\Mtarix.Generate.cs" />
+    <Compile Include="Matrix\MatrixStates\State.cs" />
+    <Compile Include="Matrix\Tiles\Tile.cs" />
+    <Compile Include="Matrix\Tiles\TileEventArgs.cs" />
+    <Compile Include="Matrix\Tiles\TileState.cs" />
+    <Compile Include="Matrix\Tiles\TileType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="View\Adapters\SpriteFontAdapter.cs" />
+    <Compile Include="View\Adapters\Texture2dAdapter.cs" />
+    <Compile Include="Scenes\MainScene.cs" />
+    <Compile Include="Scenes\BaseScene\Scene.cs" />
+    <Compile Include="Scenes\BaseScene\ScenesManager.cs" />
+    <Compile Include="View\FontManager.cs" />
+    <Compile Include="View\Sprite.cs" />
+    <Compile Include="View\TextureManager.cs" />
+    <Compile Include="View\TileSprite.cs" />
+    <Compile Include="View\Timer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Windows\MonoGame.Framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -58,7 +102,9 @@
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
     <None Include="app.manifest" />
+    <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

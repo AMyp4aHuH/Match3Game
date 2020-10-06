@@ -1,0 +1,170 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Match3Game.Interfaces;
+using Match3Game.Common;
+using System.Threading;
+using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
+
+namespace Match3Game.Matrix
+{
+    public partial class Matrix : IGameElement
+    {
+        private Tile[,] data;
+
+        public int Rows { get; private set; }
+
+        public int Columns { get; private set; }
+
+        public static int CellSize { get; private set; }
+
+        public State State { get; private set; }
+
+        private Cell selectedCellStart = null;
+        private Cell selectedCellEnd = null;
+        private TileFactory tileFactory;
+        private GameAnalytics gameAnalytics;
+        private List<LineDestroyers> destroyers = new List<LineDestroyers>();
+
+        public static int HeightIndent;
+        public static int WidthIndent;
+
+        public static int windthIndentInsideCell;
+        public static int heightIndentInsideCell;
+
+        public Tile this[int y, int x]
+        {
+            get
+            {
+                return this.data[y, x];
+            }
+            set
+            {
+                this.data[y, x] = value;
+            }
+        }
+
+        public Tile this[Cell cell]
+        {
+            get
+            {
+                return this.data[cell.R, cell.C];
+            }
+            set
+            {
+                this.data[cell.R, cell.C] = value;
+            }
+
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="size"> Rows or columns count. Matrix is always a cube. </param>
+        /// <param name="cellSize"> Count pixels on Hight or Width (because we have a square <see cref="Tile"/>). </param>
+        /// <param name="screenSize"> Heiht and width screen. Needed for display matrix on centre. </param>
+        /// <param name="tileFactory"> Factory for creates tiles. </param>
+        public Matrix(int size, int cellSize, Point screenSize, TileFactory tileFactory, GameAnalytics gameAnalytics)
+        {
+            State.GameOver = false;
+            Matrix.CellSize = cellSize;
+            this.tileFactory = tileFactory;
+            this.tileFactory.tileDestroying += OnTileDestroying;
+            this.gameAnalytics = gameAnalytics;
+
+            this.Rows = size;
+            this.Columns = size;
+            this.data = new Tile[Rows, Columns];
+            // Set indent.
+            HeightIndent = (screenSize.Y - Rows * CellSize) / 2;
+            WidthIndent = (screenSize.X - Columns * CellSize) / 2;
+
+            
+
+            this.State = new GenerateState(this);
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            for (var i = 0; i < Rows; i++)
+            {
+                for (var j = 0; j < Columns; j++)
+                {
+                    if (this[i, j] != null)
+                    {
+                        this[i, j].Draw(spriteBatch);
+                    }
+                }
+            }
+
+            if (destroyers.Count > 0)
+            {
+                for (int i = 0; i < destroyers.Count; i++)
+                {
+                    destroyers[i].Draw(spriteBatch);
+                }
+            }
+        }
+       
+        public void Update(int milliseconds)
+        {
+            State.Update(milliseconds);
+        }
+
+        public void ChangeState(State state)
+        {
+            this.State = state;
+        }
+
+        private void OnTileDestroying(object sender, TileEventArgs e)
+        {
+            if (e.State != TileState.Destroy && e.State != TileState.WaitDestroy)
+            {
+                gameAnalytics.Score += 1;
+
+                Cell positionInMatrix = e.PositionOnMatrix;
+                switch (e.TileType)
+                {
+                    case TileType.HorizontalLine:
+                        {
+                            LineDestroyers lineDestroyer = new LineDestroyers(this, new Cell(positionInMatrix.R, positionInMatrix.C, (Tile)sender), tileFactory);
+                            destroyers.Add(lineDestroyer);
+                            break;
+                        }
+
+                    case TileType.VerticalLine:
+                        {
+                            LineDestroyers lineDestroyer = new LineDestroyers(this, new Cell(positionInMatrix.R, positionInMatrix.C, (Tile)sender), tileFactory);
+                            destroyers.Add(lineDestroyer);
+                            break;
+                        }
+
+                    case TileType.Bomb:
+                        {
+                            for (int i = positionInMatrix.R - 1; i <= positionInMatrix.R + 1; i++)
+                            {
+                                for (int j = positionInMatrix.C - 1; j <= positionInMatrix.C + 1; j++)
+                                {
+                                    if (i >= 0 &&
+                                        j >= 0 &&
+                                        i < Rows &&
+                                        j < Columns)
+                                    {
+                                        if( this[i,j] != null && 
+                                            this[i,j].State == TileState.Idle
+                                            )
+                                        {
+                                            this[i, j].ChangeState(TileState.WaitDestroy);
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+}
