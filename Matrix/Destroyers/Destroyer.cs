@@ -8,7 +8,7 @@ namespace Match3Game.Matrix
     public class Destroyer : TileSprite
     {
         public DestroyerState State = DestroyerState.Empty;
-        public Cell LastCellDestroyed;
+        public Cell LastCellCollision;
 
         public Destroyer()
         {

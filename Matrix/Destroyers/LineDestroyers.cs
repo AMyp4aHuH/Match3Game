@@ -91,9 +91,9 @@ namespace Match3Game.Matrix
                 if (tile != null && (tile.State == TileState.Idle || tile.State == TileState.WaitDestroy))
                 {
                     tile.ChangeState(TileState.Destroy);
-                    SearchNotDestryedTile(cell, destroyer.LastCellDestroyed);
-                    destroyer.LastCellDestroyed = cell;
+                    SearchNotDestryedTile(cell, destroyer.LastCellCollision);
                 }
+                destroyer.LastCellCollision = cell;
             }
         }
 
@@ -112,7 +112,7 @@ namespace Match3Game.Matrix
                         if (c > 0)
                         {
                             // Right.
-                            for (int i = 1; i <= Math.Abs(c); i++)
+                            for (int i = 1; i < Math.Abs(c); i++)
                             {
                                 matrix[last.R, last.C + i]?.ChangeState(TileState.Destroy);
                             }
@@ -120,7 +120,7 @@ namespace Match3Game.Matrix
                         else
                         {
                             // Left.
-                            for (int i = 1; i <= Math.Abs(r); i++)
+                            for (int i = 1; i < Math.Abs(r); i++)
                             {
                                 matrix[last.R, last.C - i]?.ChangeState(TileState.Destroy);
                             }
@@ -132,7 +132,7 @@ namespace Match3Game.Matrix
                         if (r > 0)
                         {
                             // Down.
-                            for (int i = 1; i <= Math.Abs(r); i++)
+                            for (int i = 1; i < Math.Abs(r); i++)
                             {
                                 matrix[last.R + i, last.C]?.ChangeState(TileState.Destroy);
                             }
@@ -140,9 +140,9 @@ namespace Match3Game.Matrix
                         else
                         {
                             // Up.
-                            for (int i = 1; i <= Math.Abs(r); i++)
+                            for (int i = 1; i < Math.Abs(r); i++)
                             {
-                                matrix[last.R + i, last.C]?.ChangeState(TileState.Destroy);
+                                matrix[last.R - i, last.C]?.ChangeState(TileState.Destroy);
                             }
                         }
                     }

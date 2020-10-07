@@ -32,6 +32,7 @@ namespace Match3Game.Scenes.Adapters
                 PositionOnScreen, 
                 Color.White
                 );
+            
         }
 
         /// <summary> Empty method. </summary>

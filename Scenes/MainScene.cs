@@ -20,17 +20,28 @@ namespace Match3Game.Scenes
             spriteFontScore = FontManager.DefaultFont;
 
             Matrix.Matrix matrix = new Matrix.Matrix(
-                12,
-                26,
+                8,
+                28,
                 ScreenSize,
                 new DefaultTileFactory(),
                 GameAnalytics
                 );
 
-            timer = new Timer(600000);
+            timer = new Timer(3000);
             timer.Action += StopGame;
 
+            Sprite backgroundMatrix = new Sprite(TextureManager.BackgroundMatrix);
+            backgroundMatrix.Scale = (float)((Matrix.Matrix.CellSize * matrix.Rows) + matrix.Rows) / backgroundMatrix.Rectangle.Height;
+            backgroundMatrix.DisplayOnCenterScreen();
+
+            Sprite backgroundScore = new Sprite(TextureManager.ScoreBackground);
+            backgroundScore.Scale = 0.5f;
+            backgroundScore.DisplayOnCenterScreen();
+            backgroundScore.PositionOnScreen = new Vector2(20, backgroundScore.PositionOnScreen.Y);
+
             AddGameElement(background);
+            AddGameElement(backgroundScore);
+            AddGameElement(backgroundMatrix);
             AddGameElement(matrix);
             AddGameElement(timer);
         }
@@ -38,9 +49,8 @@ namespace Match3Game.Scenes
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            //spriteBatch.DrawString(spriteFontScore, $"State: {matrix.State}", new Vector2(0, 0), Color.White);
-            spriteBatch.DrawString(spriteFontScore, $"Score: {GameAnalytics.Score}", new Vector2(0, 25), Color.White);
-            spriteBatch.DrawString(spriteFontScore, $"Time: {((timer is null) ? 0 : timer.DelayTime / 1000 )}", new Vector2(0, 50), Color.White); 
+            spriteBatch.DrawString(spriteFontScore, $"Score: {GameAnalytics.Score}", new Vector2(35,200), Color.White);
+            spriteBatch.DrawString(spriteFontScore, $"Time: {((timer is null) ? 0 : timer.DelayTime / 1000 )}", new Vector2(35, 235), Color.White); 
         }
 
         public override void Update(int milliseconds)
@@ -54,15 +64,16 @@ namespace Match3Game.Scenes
             RemoveGameElement(timer);
 
             Sprite messageBackground = new Sprite(TextureManager.MessageBoxBackground);
-            messageBackground.Scale = 0.8f;
+            messageBackground.Scale = 0.5f;
             messageBackground.DisplayOnCenterScreen();
 
             SpriteFontAdapter messageSprite = new SpriteFontAdapter(FontManager.DefaultFont, new Vector2(0, 0), "Game Over!");
-            messageSprite.DisplayOnCenterSprite(messageBackground, 10, -80);
+            messageSprite.DisplayOnCenterSprite(messageBackground, 5, -30);
 
-            Button buttonOk = new Button(TextureManager.ButtonOK);
-            buttonOk.Click = ButtonClickOK;
-            buttonOk.DisplayOnCenterSprite(messageBackground, 10, 0);
+            Button buttonOk = new Button(TextureManager.ButtonBackground, FontManager.DefaultFont, "OK");
+            buttonOk.Scale = 0.5f;
+            buttonOk.DisplayOnCenterSprite(messageBackground, 5, 20);
+            buttonOk.Click += ButtonClickOK;
 
             AddGameElement(messageBackground);
             AddGameElement(messageSprite);

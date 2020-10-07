@@ -19,7 +19,8 @@ namespace Match3Game.Scenes
             background.DisplayOnCenterScreen();
             AddGameElement(background);
 
-            Button buttonPlay = new Button(TextureManager.ButtonPlay);
+            Button buttonPlay = new Button(TextureManager.ButtonBackground, FontManager.DefaultFont, "Play");
+            buttonPlay.Scale = 0.5f;
             buttonPlay.DisplayOnCenterScreen();
             buttonPlay.Click += ButtonClickPlay;
             AddGameElement(buttonPlay);

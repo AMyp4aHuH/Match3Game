@@ -68,7 +68,7 @@ namespace Match3Game
         private static Texture2D buttonPlay;
         public static Texture2D ButtonPlay =>
             buttonPlay is null ? buttonPlay = content.Load<Texture2D>(@"Buttons/buttonStart") : buttonPlay;
-
+ 
         private static Texture2D buttonOK;
         public static Texture2D ButtonOK =>
             buttonOK is null ? buttonOK = content.Load<Texture2D>(@"Buttons/buttonOK") : buttonOK;
@@ -76,6 +76,14 @@ namespace Match3Game
         private static Texture2D messageBoxBackground;
         public static Texture2D MessageBoxBackground =>
             messageBoxBackground is null ? messageBoxBackground = content.Load<Texture2D>(@"Common/backgroundDialog") : messageBoxBackground;
+
+        private static Texture2D scoreBackground;
+        public static Texture2D ScoreBackground =>
+            scoreBackground is null ? scoreBackground = content.Load<Texture2D>(@"Common/backgroundScore") : scoreBackground;
+
+        private static Texture2D buttonBackground;
+        public static Texture2D ButtonBackground =>
+            buttonBackground is null ? buttonBackground = content.Load<Texture2D>(@"Buttons/buttonBackground") : buttonBackground;
 
         #endregion
 
