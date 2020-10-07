@@ -1,10 +1,13 @@
-﻿using Match3Game.Common;
-using Match3Game.Matrix;
-using Match3Game.Scenes.Adapters;
-using Match3Game.View;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Match3Game.MatrixElements;
+using Match3Game.Common;
+using Match3Game.Controls;
+using Match3Game.Providers;
+using Match3Game.Sprites;
+using Match3Game.Sprites.Adapters;
+using Matrix = Match3Game.MatrixElements.Matrix;
 
 namespace Match3Game.Scenes
 {
@@ -15,11 +18,12 @@ namespace Match3Game.Scenes
 
         public override void Load(ContentManager content)
         {
-            Sprite background = new Sprite(TextureManager.Background);
+            Sprite background = new Sprite(TextureProvider.Background);
             background.DisplayOnCenterScreen();
-            spriteFontScore = FontManager.DefaultFont;
 
-            Matrix.Matrix matrix = new Matrix.Matrix(
+            spriteFontScore = FontProvider.DefaultFont;
+
+            Matrix matrix = new Matrix(
                 8,
                 28,
                 ScreenSize,
@@ -27,14 +31,15 @@ namespace Match3Game.Scenes
                 GameAnalytics
                 );
 
-            timer = new Timer(3000);
+            timer = new Timer(60000);
             timer.Action += StopGame;
 
-            Sprite backgroundMatrix = new Sprite(TextureManager.BackgroundMatrix);
-            backgroundMatrix.Scale = (float)((Matrix.Matrix.CellSize * matrix.Rows) + matrix.Rows) / backgroundMatrix.Rectangle.Height;
+            Sprite backgroundMatrix = new Sprite(TextureProvider.BackgroundMatrix);
+            backgroundMatrix.Scale = 
+                (float)((Matrix.CellSize * matrix.Rows) + matrix.Rows) / backgroundMatrix.Rectangle.Height;
             backgroundMatrix.DisplayOnCenterScreen();
 
-            Sprite backgroundScore = new Sprite(TextureManager.ScoreBackground);
+            Sprite backgroundScore = new Sprite(TextureProvider.ScoreBackground);
             backgroundScore.Scale = 0.5f;
             backgroundScore.DisplayOnCenterScreen();
             backgroundScore.PositionOnScreen = new Vector2(20, backgroundScore.PositionOnScreen.Y);
@@ -49,28 +54,37 @@ namespace Match3Game.Scenes
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            spriteBatch.DrawString(spriteFontScore, $"Score: {GameAnalytics.Score}", new Vector2(35,200), Color.White);
-            spriteBatch.DrawString(spriteFontScore, $"Time: {((timer is null) ? 0 : timer.DelayTime / 1000 )}", new Vector2(35, 235), Color.White); 
+            spriteBatch.DrawString(
+                spriteFontScore, 
+                $"Score: {GameAnalytics.Score}", 
+                new Vector2(35,202), 
+                Color.White);
+            spriteBatch.DrawString(
+                spriteFontScore, 
+                $"Time: {((timer is null) ? 0 : timer.DelayTime / 1000 )}",
+                new Vector2(35, 240),
+                Color.White); 
         }
 
-        public override void Update(int milliseconds)
+        public override void Update(int elapsedTime)
         {
-            base.Update(milliseconds);
+            base.Update(elapsedTime);
         }
     
         public void StopGame()
         {
-            Matrix.State.GameOver = true;
+            MatrixState.GameOver = true;
             RemoveGameElement(timer);
 
-            Sprite messageBackground = new Sprite(TextureManager.MessageBoxBackground);
+            Sprite messageBackground = new Sprite(TextureProvider.MessageBoxBackground);
             messageBackground.Scale = 0.5f;
             messageBackground.DisplayOnCenterScreen();
 
-            SpriteFontAdapter messageSprite = new SpriteFontAdapter(FontManager.DefaultFont, new Vector2(0, 0), "Game Over!");
+            SpriteFontAdapter messageSprite = 
+                new SpriteFontAdapter(FontProvider.DefaultFont, Vector2.Zero, "Game Over!");
             messageSprite.DisplayOnCenterSprite(messageBackground, 5, -30);
 
-            Button buttonOk = new Button(TextureManager.ButtonBackground, FontManager.DefaultFont, "OK");
+            Button buttonOk = new Button(TextureProvider.ButtonBackground, FontProvider.DefaultFont, "OK");
             buttonOk.Scale = 0.5f;
             buttonOk.DisplayOnCenterSprite(messageBackground, 5, 20);
             buttonOk.Click += ButtonClickOK;
@@ -82,7 +96,7 @@ namespace Match3Game.Scenes
 
         public void ButtonClickOK()
         {
-            Scene.GameAnalytics.Reset();
+            GameAnalytics.Reset();
             MouseClickDetector.Clear();
             ScenesManager.ChangeScene<StartScene>();
         }

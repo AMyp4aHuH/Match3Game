@@ -1,18 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Match3Game.Matrix
+namespace Match3Game.MatrixElements
 {
     /// <summary>
     /// Needed for convertation Cell in Vector and Vector in Cell. 
     /// </summary>
-    public static class PositionHelper
+    public static class PositionConverter
     {
-        public static Vector2 GetCoordinatesOnScreen(Cell cell)
+        public static Vector2 GetPositionsOnScreen(Cell cell)
         {
             Vector2 position = new Vector2(
                 x: cell.C * Matrix.CellSize + Matrix.WidthIndent,
@@ -22,10 +17,10 @@ namespace Match3Game.Matrix
             return position;
         }
 
-        public static Vector2 GetCoordinatesOnScreen(int r, int c)
+        public static Vector2 GetPositionsOnScreen(int r, int c)
         {
             Cell cell = new Cell(r, c);
-            return GetCoordinatesOnScreen(cell);
+            return GetPositionsOnScreen(cell);
         }
 
         /// <summary>

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Match3Game.Matrix
+namespace Match3Game.MatrixElements.Destroyers
 {
     public enum DestroyerState : byte
     {

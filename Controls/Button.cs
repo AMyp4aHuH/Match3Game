@@ -1,16 +1,12 @@
 ﻿using Match3Game.Common;
 using Match3Game.Interfaces;
-using Match3Game.Scenes;
-using Match3Game.Scenes.Adapters;
+using Match3Game.Sprites;
+using Match3Game.Sprites.Adapters;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Match3Game.View
+namespace Match3Game.Controls
 {
     public class Button : Sprite, IGameElement
     {

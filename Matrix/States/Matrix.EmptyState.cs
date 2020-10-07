@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace Match3Game.Matrix
+namespace Match3Game.MatrixElements
 {
     public partial class Matrix
     {
-        public class EmptyState : State
+        public class EmptyState : MatrixState
         {
             public EmptyState(Matrix matrix) : base(matrix)
             {

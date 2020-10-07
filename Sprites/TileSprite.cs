@@ -6,23 +6,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Match3Game.Matrix;
+using Match3Game.MatrixElements;
 
-namespace Match3Game.View
+namespace Match3Game.Sprites
 {
     public class TileSprite : Sprite
     {
         private Texture2D detail;
-
         private const int selectPeriod = 100;
         private const int movePeriod = 10;
         private const int createPeriod = 40;
         private const int destroyPeriod = 40;
-        private const int frameWidth = 24;
-        private const int frameHeight = 24;
         private const int waitDestroyDelay = 250;
         private int elapsedTime = 0;
-
         protected Queue<Vector2> movePositions = new Queue<Vector2>();
 
         public void SetDetail(Texture2D texture)
@@ -37,24 +33,20 @@ namespace Match3Game.View
                 spriteBatch.Draw(
                    foreground,
                    PositionOnScreen,
-                   new Rectangle(currentFrame.X * frameWidth, currentFrame.Y * frameHeight, frameWidth, frameHeight),
-                   Microsoft.Xna.Framework.Color.White
+                   new Rectangle(currentFrame.X * frame.Width, currentFrame.Y * frame.Height, frame.Width, frame.Height),
+                   Color.White
                    );
             }
 
             if (detail != null)
             {
                 spriteBatch.Draw(
-               detail,
-               PositionOnScreen,
-               new Rectangle(currentFrame.X * frameWidth, currentFrame.Y * frameHeight, frameWidth, frameHeight),
-               Microsoft.Xna.Framework.Color.White);
+                    detail,
+                    PositionOnScreen,
+                    new Rectangle(currentFrame.X * frame.Width, currentFrame.Y * frame.Height, frame.Width, frame.Height),
+                    Color.White
+                    );
             }
-        }
-
-        public override void Update(int milliseconds)
-        {
-
         }
 
         public void DisplayIdle()
@@ -97,10 +89,9 @@ namespace Match3Game.View
             else
             {
                 DisplayIdle();
-                return true;
+                return false;
             }
-
-            return false;
+            return true;
         }
 
         public bool DisplayDestroy(int elapsedTime)
@@ -111,18 +102,17 @@ namespace Match3Game.View
                 this.elapsedTime -= destroyPeriod;
 
                 ++currentFrame.X;
-                if (currentFrame.X >= spriteSize.X - 1)
+                if (currentFrame.X >= spriteSize.X)
                 {
                     ++currentFrame.Y;
-                    if (currentFrame.Y >= spriteSize.Y - 1)
+                    if (currentFrame.Y >= spriteSize.Y)
                     {
                         this.elapsedTime = 0;
-                        return true;
+                        return false;
                     }
                 }
             }
-
-            return false;
+            return true;
         }
 
         public bool DisplayWaitDestroy(int elapsedTime)
@@ -130,12 +120,12 @@ namespace Match3Game.View
             this.elapsedTime += elapsedTime;
             if (this.elapsedTime >= waitDestroyDelay)
             {
-                elapsedTime = 0;
-                return true;
+                this.elapsedTime = 0;
+                return false;
             }
             else
             {
-                return false;
+                return true;
             }
         }
 
@@ -145,7 +135,6 @@ namespace Match3Game.View
             if (this.elapsedTime >= createPeriod)
             {
                 this.elapsedTime -= createPeriod;
-
                 --currentFrame.X;
                 if (currentFrame.X <= 0)
                 {
@@ -154,19 +143,19 @@ namespace Match3Game.View
                     {
                         this.elapsedTime = 0;
                         currentFrame = Point.Zero;
-                        return true;
+                        return false;
                     }
                 }
             }
-            return false;
+            return true;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="animationTime"> Count frames in MOVE animation. </param>
+        /// <param name="countTiks"> Frames count in MOVE animation. </param>
         /// <param name="distance"> Distance in pixels. </param>
-        protected float[] FillQueue(int countTiks = 20, int distance = 26)
+        protected float[] FillMoveQueue(int countTiks = 20, int distance = 26)
         {
             if (countTiks % 2 != 0)
             {

@@ -2,15 +2,15 @@
 using Microsoft.Xna.Framework;
 using System;
 
-namespace Match3Game.Matrix
+namespace Match3Game.MatrixElements
 {
     public partial class Matrix
     {
-        class SwapState : State
+        class SwapState : MatrixState
         {
-            private State oldState;
+            private MatrixState oldState;
 
-            public SwapState(Matrix matrix, State oldState) : base(matrix)
+            public SwapState(Matrix matrix, MatrixState oldState) : base(matrix)
             {
                 this.oldState = oldState;
                 Swap(matrix.selectedCellStart, matrix.selectedCellEnd);
@@ -79,16 +79,11 @@ namespace Match3Game.Matrix
             {
                 switch (direction)
                 {
-                    case Direction.Left:
-                        return Direction.Right;
-                    case Direction.Up:
-                        return Direction.Down;
-                    case Direction.Right:
-                        return Direction.Left;
-                    case Direction.Down:
-                        return Direction.Up;
-                    default:
-                        return Direction.None;
+                    case Direction.Left: return Direction.Right;
+                    case Direction.Up: return Direction.Down;
+                    case Direction.Right: return Direction.Left;
+                    case Direction.Down: return Direction.Up;
+                    default: return Direction.None;
                 }
             }
 
@@ -103,12 +98,9 @@ namespace Match3Game.Matrix
                     matrix[cell1.R, cell1.C] = null;
                     matrix[cell2.R, cell2.C] = null;
                     matrix[cell1.R, cell1.C] = temp2;
-
                     matrix[cell2.R, cell2.C] = temp1;
-
                     matrix[cell1.R, cell1.C].SwapMove(GetMirrorDirection(direction));
                     matrix[cell2.R, cell2.C].SwapMove(direction);
-
                     cell1.Tile = temp2;
                     cell2.Tile = temp1;
                 }
@@ -118,7 +110,8 @@ namespace Match3Game.Matrix
                 }
             }
 
-            /// <summary> Changes the current state to <see cref="Matrix.DestroyState"/> or <see cref="Matrix.IdleState"/>  depending on the old state. </summary>
+            /// <summary> Changes the current state to <see cref="Matrix.DestroyState"/> or 
+            /// <see cref="Matrix.IdleState"/> depending on the old state. </summary>
             private void NextState()
             {
                 // We can do something here if needed when changing state.

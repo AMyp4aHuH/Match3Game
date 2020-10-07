@@ -6,35 +6,35 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Match3Game.Matrix
+namespace Match3Game.MatrixElements.Destroyers
 {
     public class LineDestroyers
     {
-        public Cell LineBonus;
+        private Cell lineBonus;
         private Destroyer destroyerOne;
         private Destroyer destroyerTwo;
         private Matrix matrix;
         private TileFactory tileFactory;
 
         /// <param name="cellLine"> Must contain Tile and its position in the matrix. </param>
-        public LineDestroyers(Matrix matrix ,Cell cellLine, TileFactory tileFactory)
+        public LineDestroyers(Matrix matrix ,Cell lineBonus, TileFactory tileFactory)
         {
             this.matrix = matrix;
-            LineBonus = cellLine;
+            this.lineBonus = lineBonus;
             this.tileFactory = tileFactory;
 
-            switch(LineBonus.Tile.Type)
+            switch(this.lineBonus.Tile.Type)
             {
                 case TileType.HorizontalLine:
                     {
-                        if (LineBonus.C != 0 && LineBonus.C != matrix.Columns - 1)
+                        if (this.lineBonus.C != 0 && this.lineBonus.C != matrix.Columns - 1)
                         {
                             GoLeft();
                             GoRight();
                         }
                         else
                         {
-                            if(LineBonus.C == 0)
+                            if(this.lineBonus.C == 0)
                             {
                                 GoRight();
                             }
@@ -46,16 +46,17 @@ namespace Match3Game.Matrix
 
                         break;
                     }
+
                 case TileType.VerticalLine:
                     {
-                        if (LineBonus.R != 0 && LineBonus.R != matrix.Rows - 1)
+                        if (this.lineBonus.R != 0 && this.lineBonus.R != matrix.Rows - 1)
                         {
                             GoUp();
                             GoDown();
                         }
                         else
                         {
-                            if (LineBonus.R == 0)
+                            if (this.lineBonus.R == 0)
                             {
                                 GoDown();
                             }
@@ -86,8 +87,8 @@ namespace Match3Game.Matrix
             if (destroyer != null)
             {
                 destroyer.Update(elapsedTime);
-                Cell cell = PositionHelper.GetCellByTilePosition(destroyer.PositionOnScreen);
-                Tile tile = matrix[cell];
+                var cell = PositionConverter.GetCellByTilePosition(destroyer.PositionOnScreen);
+                var tile = matrix[cell];
                 if (tile != null && (tile.State == TileState.Idle || tile.State == TileState.WaitDestroy))
                 {
                     tile.ChangeState(TileState.Destroy);
@@ -154,8 +155,8 @@ namespace Match3Game.Matrix
         {
             destroyerOne = tileFactory.CreateDestoyer();
             destroyerOne.Move(
-                PositionHelper.GetCoordinatesOnScreen(r: LineBonus.R, c: LineBonus.C - 1),
-                PositionHelper.GetCoordinatesOnScreen(r: LineBonus.R, c: 0)
+                PositionConverter.GetPositionsOnScreen(r: lineBonus.R, c: lineBonus.C - 1),
+                PositionConverter.GetPositionsOnScreen(r: lineBonus.R, c: 0)
                 );
         }
 
@@ -163,8 +164,8 @@ namespace Match3Game.Matrix
         {
             destroyerTwo = new Destroyer();
             destroyerTwo.Move(
-                PositionHelper.GetCoordinatesOnScreen(r: LineBonus.R, c: LineBonus.C + 1),
-                PositionHelper.GetCoordinatesOnScreen(r: LineBonus.R, c: matrix.Columns - 1)
+                PositionConverter.GetPositionsOnScreen(r: lineBonus.R, c: lineBonus.C + 1),
+                PositionConverter.GetPositionsOnScreen(r: lineBonus.R, c: matrix.Columns - 1)
                 );
         }
 
@@ -172,8 +173,8 @@ namespace Match3Game.Matrix
         {
             destroyerOne = new Destroyer();
             destroyerOne.Move(
-                PositionHelper.GetCoordinatesOnScreen(r: LineBonus.R - 1, c: LineBonus.C),
-                PositionHelper.GetCoordinatesOnScreen(r: 0, c: LineBonus.C)
+                PositionConverter.GetPositionsOnScreen(r: lineBonus.R - 1, c: lineBonus.C),
+                PositionConverter.GetPositionsOnScreen(r: 0, c: lineBonus.C)
                 );
         }
 
@@ -181,9 +182,9 @@ namespace Match3Game.Matrix
         {
             destroyerTwo = new Destroyer();
             destroyerTwo.Move(
-                PositionHelper.GetCoordinatesOnScreen(r: LineBonus.R + 1, c: LineBonus.C),
+                PositionConverter.GetPositionsOnScreen(r: lineBonus.R + 1, c: lineBonus.C),
 
-                PositionHelper.GetCoordinatesOnScreen(r: matrix.Rows - 1, c: LineBonus.C)
+                PositionConverter.GetPositionsOnScreen(r: matrix.Rows - 1, c: lineBonus.C)
 
                 );
         }

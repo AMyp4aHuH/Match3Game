@@ -1,16 +1,18 @@
-﻿using System;
+﻿using Match3Game.MatrixElements.Destroyers;
+using Match3Game.Providers;
+using System;
 
-namespace Match3Game.Matrix
+namespace Match3Game.MatrixElements
 {
     public abstract class TileFactory
     {
         public Tile.TileDestroy tileDestroying;
 
-        public abstract Tile GetNextTile(Type type, Cell cell);
+        public abstract Tile CreateNextTile(Type type, Cell cell);
 
-        public abstract Tile GetRandomTile(Cell cell);
+        public abstract Tile CreateRandomTile(Cell cell);
 
-        public Tile GetTile(Type type, Cell cell)
+        public Tile CreateTile(Type type, Cell cell)
         {
             Tile tile = Activator.CreateInstance(type) as Tile;
             tile.SetPosition(cell);
@@ -19,33 +21,33 @@ namespace Match3Game.Matrix
             return tile;
         }
 
-        public Tile GetVerticalLineBonus(Type type, Cell cell)
+        public Tile CreateVerticalLineBonus(Type type, Cell cell)
         {
             Tile tile = Activator.CreateInstance(type) as Tile;
             tile.SetPosition(cell);
             tile.Destroying += tileDestroying;
             tile.Type = TileType.VerticalLine;
-            tile.SetDetail(TextureManager.VerticaDefaultlLineTexture);
+            tile.SetDetail(TextureProvider.VerticaDefaultlLineTexture);
             return tile;
         }
 
-        public Tile GetHorizontalLineBonus(Type type, Cell cell)
+        public Tile CreateHorizontalLineBonus(Type type, Cell cell)
         {
             Tile tile = Activator.CreateInstance(type) as Tile;
             tile.SetPosition(cell);
             tile.Destroying += tileDestroying;
             tile.Type = TileType.HorizontalLine;
-            tile.SetDetail(TextureManager.HorizontalDefaultLineTexture);
+            tile.SetDetail(TextureProvider.HorizontalDefaultLineTexture);
             return tile;
         }
 
-        public Tile GetBomb(Type type, Cell cell)
+        public Tile CreateBomb(Type type, Cell cell)
         {
             Tile tile = Activator.CreateInstance(type) as Tile;
             tile.SetPosition(cell);
             tile.Destroying += tileDestroying;
             tile.Type = TileType.Bomb;
-            tile.SetDetail(TextureManager.BombDefaultTexture);
+            tile.SetDetail(TextureProvider.BombDefaultTexture);
             return tile;
         }
 

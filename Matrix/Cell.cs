@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Match3Game.Matrix
+namespace Match3Game.MatrixElements
 {
     public class Cell : IEquatable<Cell>
     {

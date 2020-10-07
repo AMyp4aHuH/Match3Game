@@ -3,11 +3,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 
-namespace Match3Game.Matrix
+namespace Match3Game.MatrixElements
 {
     public partial class Matrix
     {
-        public class IdleState : State
+        public class IdleState : MatrixState
         {
             public IdleState(Matrix matrix) : base(matrix)
             {
@@ -16,7 +16,7 @@ namespace Match3Game.Matrix
                 SubscribeOnMouseEvents();
             }
 
-            public IdleState(Matrix matrix, State oldState) : base(matrix)
+            public IdleState(Matrix matrix, MatrixState oldState) : base(matrix)
             {
                 matrix.selectedCellStart = null;
                 matrix.selectedCellEnd = null;
@@ -41,39 +41,25 @@ namespace Match3Game.Matrix
                 NextState();
             }
 
-            /// <summary>
-            /// 
-            /// </summary>
-            /// <param name="x"> Click coordinates along the X-axis. (On the screen) </param>
-            /// <param name="y"> Click coordinates along the Y-axis. (On the screen) </param>
-            /// <returns> Return a cell with coordinates in matrix and tile. </returns>
+            /// <returns> Return a cell with coordinates in matrix and Tile. </returns>
             private Cell GetSelectionCell(Vector2 position)
             {
-                // True work!!!
-                position.X -= WidthIndent;
-                position.Y -= HeightIndent;
-
-                var xx = Math.Floor(Convert.ToDecimal((decimal)position.X / (decimal)CellSize));
-                var yy = Math.Floor(Convert.ToDecimal((decimal)position.Y / (decimal)CellSize));
-
-                if (0 <= xx && xx < matrix.Columns)
+                Cell cell = PositionConverter.GetCellByClickPosition(position);
+                if (0 <= cell.C && cell.C < matrix.Columns)
                 {
-                    if (0 <= yy && yy < matrix.Rows)
+                    if (0 <= cell.R && cell.R < matrix.Rows)
                     {
-                        Cell cell = new Cell((int)yy, (int)xx);
-                        if(matrix[cell.R, cell.C] != null)
+                        if(matrix[cell] != null)
                         {
-                            cell.Tile = matrix[cell.R, cell.C];
+                            cell.Tile = matrix[cell];
                         }
                         else
                         {
                             cell = null;
                         }
-                        
                         return cell;
                     }
                 }
-
                 return null;
             }
 
@@ -91,35 +77,34 @@ namespace Match3Game.Matrix
                     Cell cell = GetSelectionCell(args.ClickPosition);
                     if(cell != null)
                     {
-                        matrix[cell] = matrix.tileFactory.GetNextTile(cell.Tile.GetType(), cell);
+                        matrix[cell] = matrix.tileFactory.CreateNextTile(cell.Tile.GetType(), cell);
                     }
                 }
                 else if(Keyboard.GetState().IsKeyDown(Keys.LeftAlt))
                 {
                     Cell cell = GetSelectionCell(args.ClickPosition);
-
                     if(cell != null)
                     {
                         switch (cell.Tile.Type)
                         {
                             case TileType.Default:
                                 {
-                                    matrix[cell] = matrix.tileFactory.GetHorizontalLineBonus(cell.Tile.GetType(), cell);
+                                    matrix[cell] = matrix.tileFactory.CreateHorizontalLineBonus(cell.Tile.GetType(), cell);
                                     break;
                                 }
                             case TileType.HorizontalLine:
                                 {
-                                    matrix[cell] = matrix.tileFactory.GetVerticalLineBonus(cell.Tile.GetType(), cell);
+                                    matrix[cell] = matrix.tileFactory.CreateVerticalLineBonus(cell.Tile.GetType(), cell);
                                     break;
                                 }
                             case TileType.VerticalLine:
                                 {
-                                    matrix[cell] = matrix.tileFactory.GetBomb(cell.Tile.GetType(), cell);
+                                    matrix[cell] = matrix.tileFactory.CreateBomb(cell.Tile.GetType(), cell);
                                     break;
                                 }
                             case TileType.Bomb:
                                 {
-                                    matrix[cell] = matrix.tileFactory.GetTile(cell.Tile.GetType(), cell);
+                                    matrix[cell] = matrix.tileFactory.CreateTile(cell.Tile.GetType(), cell);
                                     break;
                                 }
                         }

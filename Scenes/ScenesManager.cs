@@ -11,15 +11,14 @@ namespace Match3Game.Scenes
 {
     public static class ScenesManager
     {
-        private static ContentManager content;
-        public static ContentManager Content { set => content = value; }
+        public static ContentManager Content { private get; set; }
 
         private static Scene currentScene;
 
         static ScenesManager()
         {
             currentScene = new StartScene();
-            currentScene.Load(content);
+            currentScene.Load(Content);
         }
 
         public static void Draw(SpriteBatch spriteBatch)
@@ -27,15 +26,15 @@ namespace Match3Game.Scenes
             currentScene?.Draw(spriteBatch);
         }
 
-        public static void Update(int milliseconds)
+        public static void Update(int elapsedTime)
         {
-            currentScene?.Update(milliseconds);
+            currentScene?.Update(elapsedTime);
         }
 
         public static void ChangeScene<T>() where T : Scene, new()
         {
             currentScene = new T();
-            currentScene.Load(content);
+            currentScene.Load(Content);
         }
     }
 }

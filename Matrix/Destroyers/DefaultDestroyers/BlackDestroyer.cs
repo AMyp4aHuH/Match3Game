@@ -1,12 +1,14 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Match3Game.MatrixElements.Destroyers;
+using Match3Game.Providers;
+using Microsoft.Xna.Framework;
 
-namespace Match3Game.Matrix
+namespace Match3Game.MatrixElements
 {
     public class BlackDestroyer : Destroyer
     {
         public BlackDestroyer()
         {
-            SetForeground(TextureManager.DestroyerTexture, new Point(4, 1), new Point(3, 0));
+            SetForeground(TextureProvider.DestroyerTexture, new Point(4, 1), new Point(3, 0));
         }
     }
 }

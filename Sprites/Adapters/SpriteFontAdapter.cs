@@ -1,9 +1,8 @@
 ﻿using Match3Game.Interfaces;
-using Match3Game.View;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Match3Game.Scenes.Adapters
+namespace Match3Game.Sprites.Adapters
 {
     public class SpriteFontAdapter : IGameElement
     {
@@ -11,12 +10,9 @@ namespace Match3Game.Scenes.Adapters
         public Vector2 PositionOnScreen;
         private string text = "";
 
-        /// <summary>
-        /// Use when we need display static text.
-        /// </summary>
         /// <param name="sprite"></param>
         /// <param name="position"> Position on the game screen. </param>
-        /// <param name="text"> Static text for display on the geme screen. </param>
+        /// <param name="text"> Static text for display on the game screen. </param>
         public SpriteFontAdapter(SpriteFont sprite, Vector2 position, string text)
         {
             this.sprite = sprite;
@@ -32,7 +28,6 @@ namespace Match3Game.Scenes.Adapters
                 PositionOnScreen, 
                 Color.White
                 );
-            
         }
 
         /// <summary> Empty method. </summary>

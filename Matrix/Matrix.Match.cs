@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Match3Game.Matrix
+namespace Match3Game.MatrixElements
 {
     public partial class Matrix
     {
@@ -25,24 +22,27 @@ namespace Match3Game.Matrix
                 var vMatch = new List<Cell>();
 
                 // Search match with swap cells.
-                SearchMatchCell(clickCellStart, hMatch, vMatch);
-                SearchMatchCell(clickCellEnd, hMatch, vMatch);
+                SearchMatchesCell(clickCellStart, hMatch, vMatch);
+                SearchMatchesCell(clickCellEnd, hMatch, vMatch);
 
                 // Search intersect between H and V match for create specific tile "Bomb".
-                var intersect = hMatch.Intersect(vMatch).FirstOrDefault();
+                var intersect = hMatch.Intersect(vMatch).ToList();
 
-                if (intersect != null)
+                if (intersect != null && intersect.Count > 0)
                 {
-                    specificTiles.Add(
+                    for (int i = 0; i < intersect.Count; i++)
+                    {
+                        specificTiles.Add(
                         new Cell(
-                            intersect.R, 
-                            intersect.C, 
-                            matrix.tileFactory.GetBomb(
-                                intersect.Tile.GetType(), 
-                                intersect
+                            intersect[i].R,
+                            intersect[i].C,
+                            matrix.tileFactory.CreateBomb(
+                                intersect[i].Tile.GetType(),
+                                intersect[i]
                                 )
                             )
                         );
+                    }
                 }
                 var match = new List<Cell>();
                 match.AddRange(hMatch);
@@ -54,16 +54,15 @@ namespace Match3Game.Matrix
             public List<Cell> SearchMatchAfterGenerate()
             {
                 // Matches in all rows.
-                var allHorizontalMatch = new List<Cell>();
+                var allHorizontalMatches = new List<Cell>();
                 // Matches in all columns.
-                var allVerticalMatch = new List<Cell>();
+                var allVerticalMatches = new List<Cell>();
 
                 // Search all matches (and scpecific tile)
                 for (var i = 0; i < matrix.Rows; i++)
                 {
                     var hMatch = new List<Cell>() { };
                     var vMatch = new List<Cell>() { };
-
                     var hBackTileType = matrix[i, 0].GetType();
                     var vBackTileType = matrix[0, i].GetType();
 
@@ -78,8 +77,7 @@ namespace Match3Game.Matrix
                             hBackTileType = matrix[i, j].GetType();
                             if (hMatch.Count >= 3)
                             {
-                                allHorizontalMatch.AddRange(hMatch);
-                                // Search combination for create specific tile "Line" and "Bomb".
+                                allHorizontalMatches.AddRange(hMatch);
                                 SearchSpecificMatch(hMatch, hMatch.FirstOrDefault());
                             }
                             hMatch = new List<Cell>() { new Cell(i, j, matrix[i, j]) };
@@ -94,44 +92,43 @@ namespace Match3Game.Matrix
                             vBackTileType = matrix[j, i].GetType();
                             if (vMatch.Count >= 3)
                             {
-                                allVerticalMatch.AddRange(vMatch);
-                                // Search combination for create specific tile "Line" and "Bomb".
+                                allVerticalMatches.AddRange(vMatch);
                                 SearchSpecificMatch(vMatch, vMatch.FirstOrDefault());
                             }
                             vMatch = new List<Cell>() { new Cell(j, i, matrix[j, i]) };
                         }
                     }
 
+                    // Occur when Tiles in the Column and Row end.
                     if (hMatch.Count >= 3)
                     {
-                        allHorizontalMatch.AddRange(hMatch);
+                        allHorizontalMatches.AddRange(hMatch);
                         SearchSpecificMatch(hMatch, hMatch.FirstOrDefault());
                     }
                     if (vMatch.Count >= 3)
                     {
-                        allVerticalMatch.AddRange(vMatch);
+                        allVerticalMatches.AddRange(vMatch);
                         SearchSpecificMatch(vMatch, vMatch.FirstOrDefault());
                     }
                 }
 
                 // Search common tiles between H and V matches for create tile "Bomb"
-                var intersect = allHorizontalMatch.Intersect(allVerticalMatch).ToList();
+                var intersect = allHorizontalMatches.Intersect(allVerticalMatches).ToList();
 
                 if (intersect.Count > 0)
                 {
                     foreach (var cell in intersect)
                     {
-                        Tile tile = matrix.tileFactory.GetBomb(cell.Tile.GetType(), cell);
+                        Tile tile = matrix.tileFactory.CreateBomb(cell.Tile.GetType(), cell);
                         specificTiles.Add(new Cell(cell.R, cell.C, tile));
                     }
                 }
 
                 var result = new List<Cell>();
-                result.AddRange(allHorizontalMatch);
-                result.AddRange(allVerticalMatch);
+                result.AddRange(allHorizontalMatches);
+                result.AddRange(allVerticalMatches);
 
                 return result;
-                // return new List<Cell>();
             }
 
             public List<Cell> GetSpecificTiles()
@@ -139,13 +136,12 @@ namespace Match3Game.Matrix
                 return specificTiles;
             }
 
-            private void SearchMatchCell(Cell cell, List<Cell> horizontalMatch, List<Cell> verticalMatch)
+            private void SearchMatchesCell(Cell cell, List<Cell> horizontalMatches, List<Cell> verticalMatches)
             {
-                // Check match StartCell.
-                horizontalMatch.AddRange(
+                horizontalMatches.AddRange(
                     SearchHorizontalMatch());
 
-                verticalMatch.AddRange(
+                verticalMatches.AddRange(
                     SearchVerticalMatch());
 
                 List<Cell> SearchHorizontalMatch()
@@ -244,6 +240,8 @@ namespace Match3Game.Matrix
                 }
             }
 
+            /// <summary> Search combination for create specific Tile "Line" or "Bomb". </summary>
+            /// <param name="cell"> Сell where the Tile will be placed. </param>
             private void SearchSpecificMatch(List<Cell> matchList, Cell cell)
             {
                 if (matchList.Count == 4)
@@ -257,7 +255,10 @@ namespace Match3Game.Matrix
                             new Cell(
                                 cell.R,
                                 cell.C,
-                                matrix.tileFactory.GetVerticalLineBonus(lastCell.Tile.GetType(), new Cell(cell.R, cell.C))
+                                matrix.tileFactory.CreateVerticalLineBonus(
+                                    lastCell.Tile.GetType(), 
+                                    new Cell(cell.R, cell.C)
+                                    )
                                 ));
                     }
                     else
@@ -266,7 +267,10 @@ namespace Match3Game.Matrix
                             new Cell(
                                 cell.R,
                                 cell.C,
-                                matrix.tileFactory.GetHorizontalLineBonus(lastCell.Tile.GetType(), new Cell(cell.R, cell.C))
+                                matrix.tileFactory.CreateHorizontalLineBonus(
+                                    lastCell.Tile.GetType(), 
+                                    new Cell(cell.R, cell.C)
+                                    )
                                 ));
                     }
                 }
@@ -276,7 +280,10 @@ namespace Match3Game.Matrix
                         new Cell(
                             cell.R,
                             cell.C,
-                            matrix.tileFactory.GetBomb(cell.Tile.GetType(),new Cell(cell.R, cell.C))
+                            matrix.tileFactory.CreateBomb(
+                                cell.Tile.GetType(),
+                                new Cell(cell.R, cell.C)
+                                )
                             ));
                 }
             }

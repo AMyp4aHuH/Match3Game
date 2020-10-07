@@ -1,12 +1,13 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Match3Game.Providers;
+using Microsoft.Xna.Framework;
 
-namespace Match3Game.Matrix
+namespace Match3Game.MatrixElements.DefaultTiles
 {
     public class PurpleTile : Tile
     {
         public PurpleTile() : base()
         {
-            SetForeground(TextureManager.PurpleDefaultTexture, new Point(4, 1), Point.Zero);
+            SetForeground(TextureProvider.PurpleDefaultTexture, new Point(4, 1), Point.Zero);
         }
 
     }

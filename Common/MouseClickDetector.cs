@@ -14,7 +14,7 @@ namespace Match3Game.Common
         public static event MouseSwipe LeftButtonSwipe;
 
         private static Vector2 downClickPosition = new Vector2(-1, -1);
-        private const int distanceForDetectedSwipe = 26;
+        private const int distanceForDetectedSwipe = 20;
         private static bool mouseReleased = true;
 
         public static void Update()
@@ -104,7 +104,7 @@ namespace Match3Game.Common
 
     public class MouseClickEventArgs
     {
-        public MouseClickEventArgs(Vector2 clickPosition) => this.ClickPosition = clickPosition;
+        public MouseClickEventArgs(Vector2 clickPosition) => ClickPosition = clickPosition;
         
         public readonly Vector2 ClickPosition;
     }
@@ -122,6 +122,4 @@ namespace Match3Game.Common
         public readonly Vector2 UpClickPosition;
         public readonly Direction SwipeDirection;
     }
-
-
 }

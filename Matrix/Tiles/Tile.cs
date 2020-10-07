@@ -1,13 +1,9 @@
 ﻿using Match3Game.Common;
-using Match3Game.Matrix;
-using Match3Game.View;
+using Match3Game.Sprites;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Linq;
 
-
-namespace Match3Game.Matrix
+namespace Match3Game.MatrixElements
 {
     public class Tile : TileSprite
     {
@@ -28,7 +24,10 @@ namespace Match3Game.Matrix
         {
             var windthIndentInsideCell = (Matrix.CellSize - Rectangle.Width) / 2;
             var heightIndentInsideCell = (Matrix.CellSize - Rectangle.Height) / 2;
-            PositionOnScreen = new Vector2(position.C * Matrix.CellSize + Matrix.WidthIndent + windthIndentInsideCell, position.R * Matrix.CellSize + Matrix.HeightIndent + heightIndentInsideCell);
+            PositionOnScreen = new Vector2(
+                position.C * Matrix.CellSize + Matrix.WidthIndent + windthIndentInsideCell,
+                position.R * Matrix.CellSize + Matrix.HeightIndent + heightIndentInsideCell
+                );
         }
 
         public override void Update(int elapsedTime)
@@ -43,9 +42,7 @@ namespace Match3Game.Matrix
 
                 case TileState.Move:
                     {
-                        //DisplayIdle();
-                        bool IsEnd = DisplayMove(elapsedTime);
-                        if(IsEnd)
+                        if(!DisplayMove(elapsedTime))
                         {
                             State = TileState.Idle;
                         }
@@ -60,8 +57,7 @@ namespace Match3Game.Matrix
 
                 case TileState.Destroy:
                     {
-                        bool IsEnd = DisplayDestroy(elapsedTime);
-                        if(IsEnd)
+                        if(!DisplayDestroy(elapsedTime))
                         {
                             State = TileState.Empty;
                         }
@@ -70,8 +66,7 @@ namespace Match3Game.Matrix
                 
                 case TileState.WaitDestroy:
                     {
-                        bool IsEnd = DisplayWaitDestroy(elapsedTime);
-                        if (IsEnd)
+                        if (!DisplayWaitDestroy(elapsedTime))
                         {
                             ChangeState(TileState.Destroy);
                         }
@@ -99,7 +94,7 @@ namespace Match3Game.Matrix
                         }
 
                         this.State = TileState.Destroy;
-                        Destroying?.Invoke(this, new TileEventArgs(PositionOnScreen, Type, stateBeforeDestroy, PositionHelper.GetCellByTilePosition(PositionOnScreen)));
+                        Destroying?.Invoke(this, new TileEventArgs(PositionOnScreen, Type, stateBeforeDestroy, PositionConverter.GetCellByTilePosition(PositionOnScreen)));
                         break;
                     }
                 default:
@@ -126,7 +121,7 @@ namespace Match3Game.Matrix
 
         public void Move(Direction direction)
         {
-            float[] positions = FillQueue(distance: Matrix.CellSize);
+            float[] positions = FillMoveQueue(distance: Matrix.CellSize);
 
             switch (direction)
             {
@@ -157,14 +152,14 @@ namespace Match3Game.Matrix
             }
         }
 
-        public void GenerateMoveExistTile(int oldRow, int newRow)
+        public void MoveExistingTileDuringGeneration(int oldRow, int newRow)
         { 
             State = TileState.Move;
 
             int distance = (newRow - oldRow) * Matrix.CellSize;
             PositionOnScreen = new Vector2(PositionOnScreen.X, PositionOnScreen.Y - distance);
 
-            float[] positions = FillQueue(30, distance);
+            float[] positions = FillMoveQueue(30, distance);
 
             for (int i = 0; i < positions.Count(); i++)
             {
@@ -172,14 +167,14 @@ namespace Match3Game.Matrix
             }
         }
 
-        public void GenerateMoveNewTile(int countRows)
+        public void MoveNewTileDuringGeneration(int countRows)
         {
             State = TileState.Move;
 
             int distance = Matrix.HeightIndent + Matrix.CellSize * countRows;
             PositionOnScreen = new Vector2(PositionOnScreen.X, PositionOnScreen.Y - distance);
 
-            float[] positions = FillQueue(30, distance);
+            float[] positions = FillMoveQueue(30, distance);
 
             for (int i = 0; i < positions.Count(); i++)
             {

@@ -1,21 +1,15 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Match3Game.Matrix
+﻿
+namespace Match3Game.MatrixElements
 {
     public partial class Matrix
     {
-        public class DestroyState : State
+        public class DestroyState : MatrixState
         {
-            private State oldState;
+            private MatrixState oldState;
             private bool IsMatchSwap = false;
             private bool IsMatchAllMatrix = false;
 
-            public DestroyState(Matrix matrix, State oldState) : base(matrix)
+            public DestroyState(Matrix matrix, MatrixState oldState) : base(matrix)
             {
                 this.oldState = oldState;
                 Match match = new Match(matrix);
@@ -67,7 +61,6 @@ namespace Match3Game.Matrix
             public override void Update(int elapsedTime)
             {
                 bool IsNextState = true;
-
                 for (var i = 0; i < matrix.Rows; i++)
                 {
                     for (var j = 0; j < matrix.Columns; j++)
@@ -105,7 +98,7 @@ namespace Match3Game.Matrix
             {
                 if(matrix.State is EmptyState)
                 {
-                    // To do nothing. Game Over.
+                    // To do nothing. Game over.
                 }
                 else if (oldState is SwapState && IsMatchSwap)
                 {

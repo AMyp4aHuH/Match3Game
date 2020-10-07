@@ -1,9 +1,10 @@
-﻿using Match3Game.View;
+﻿using Match3Game.Providers;
 using Microsoft.Xna.Framework;
 using System;
 using System.Linq;
+using Match3Game.Sprites;
 
-namespace Match3Game.Matrix
+namespace Match3Game.MatrixElements.Destroyers
 {
     public class Destroyer : TileSprite
     {
@@ -12,7 +13,7 @@ namespace Match3Game.Matrix
 
         public Destroyer()
         {
-            SetForeground(TextureManager.DestroyerTexture, new Point(4, 1), new Point(3, 0));
+            SetForeground(TextureProvider.DestroyerTexture, new Point(4, 1), new Point(3, 0));
         }
        
         public override void Update(int milliseconds)
@@ -21,28 +22,25 @@ namespace Match3Game.Matrix
             {
                 case DestroyerState.Create:
                     {
-                        bool isEnd = DisplayCreate(milliseconds);
-                        if (isEnd)
+                        if (!DisplayCreate(milliseconds))
                         {
-                            this.State = DestroyerState.Move;
+                            State = DestroyerState.Move;
                         }
                         break;
                     }
                 case DestroyerState.Destroy:
                     {
-                        bool isEnd = DisplayDestroy(milliseconds);
-                        if (isEnd)
+                        if (!DisplayDestroy(milliseconds))
                         {
-                            this.State = DestroyerState.Empty;
+                            State = DestroyerState.Empty;
                         }
                         break;
                     }
                 case DestroyerState.Move:
                     {
-                        bool isEnd = DisplayMove(milliseconds);
-                        if(isEnd)
+                        if(!DisplayMove(milliseconds))
                         {
-                            this.State = DestroyerState.Destroy;
+                            State = DestroyerState.Destroy;
                         }
                         break;
                     }
@@ -56,7 +54,7 @@ namespace Match3Game.Matrix
 
         public void Move(Vector2 start, Vector2 end)
         {
-            this.State = DestroyerState.Create;
+            State = DestroyerState.Create;
 
             var windthIndentInsideCell = (Matrix.CellSize - Rectangle.Width) / 2;
             var heightIndentInsideCell = (Matrix.CellSize - Rectangle.Height) / 2;
@@ -74,7 +72,7 @@ namespace Match3Game.Matrix
                 if ((Math.Abs(diffeneceVec.X) > Math.Abs(diffeneceVec.Y)))
                 {
                     // Horizontal.
-                    positions = FillQueue(distance: (int)Math.Abs(diffeneceVec.X));
+                    positions = FillMoveQueue(distance: (int)Math.Abs(diffeneceVec.X));
 
                     if (diffeneceVec.X > 0)
                     {
@@ -92,12 +90,11 @@ namespace Match3Game.Matrix
                             movePositions.Enqueue(new Vector2(positions[i], 0));
                         }
                     }
-                    
                 }
                 else
                 {
                     // Vertical
-                    positions = FillQueue(distance: (int)Math.Abs(diffeneceVec.Y));
+                    positions = FillMoveQueue(distance: (int)Math.Abs(diffeneceVec.Y));
 
                     if(diffeneceVec.Y > 0)
                     {

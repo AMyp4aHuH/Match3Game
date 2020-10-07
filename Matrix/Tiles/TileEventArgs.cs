@@ -1,7 +1,7 @@
 ﻿
 using Microsoft.Xna.Framework;
 
-namespace Match3Game.Matrix
+namespace Match3Game.MatrixElements
 {
     public class TileEventArgs
     {

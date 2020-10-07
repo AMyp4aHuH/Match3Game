@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 
-namespace Match3Game.Matrix
+namespace Match3Game.MatrixElements
 {
     public partial class Matrix
     {
-        public class GenerateState : State
+        public class GenerateState : MatrixState
         {
             public GenerateState(Matrix matrix) : base(matrix)
             {
@@ -12,7 +12,7 @@ namespace Match3Game.Matrix
                 Generate();
             }
 
-            public GenerateState(Matrix matrix, State oldState) : base(matrix)
+            public GenerateState(Matrix matrix, MatrixState oldState) : base(matrix)
             {
                 Generate();
             }
@@ -61,7 +61,7 @@ namespace Match3Game.Matrix
                                 Cell cell = NullTiles.Dequeue();
                                 matrix[cell] = matrix[i, j];
                                 matrix[cell].SetPosition(cell);
-                                matrix[cell].GenerateMoveExistTile(i, cell.R);
+                                matrix[cell].MoveExistingTileDuringGeneration(i, cell.R);
                                 matrix[i, j] = null;
                                 NullTiles.Enqueue(new Cell(i, j));
                             }
@@ -72,8 +72,8 @@ namespace Match3Game.Matrix
                     while (NullTiles.Count > 0)
                     {
                         Cell cell = NullTiles.Dequeue();
-                        matrix[cell] = matrix.tileFactory.GetRandomTile(cell);
-                        matrix[cell].GenerateMoveNewTile(cell.R + verticalOffest);
+                        matrix[cell] = matrix.tileFactory.CreateRandomTile(cell);
+                        matrix[cell].MoveNewTileDuringGeneration(cell.R + verticalOffest);
                         verticalOffest++;
                     }
                 }
