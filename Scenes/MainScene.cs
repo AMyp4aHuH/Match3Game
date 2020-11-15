@@ -27,8 +27,7 @@ namespace Match3Game.Scenes
                 8,
                 28,
                 ScreenSize,
-                new DefaultTileFactory(),
-                GameAnalytics
+                new DefaultTileFactory()
                 );
 
             timer = new Timer(60000);
@@ -56,7 +55,7 @@ namespace Match3Game.Scenes
             base.Draw(spriteBatch);
             spriteBatch.DrawString(
                 spriteFontScore, 
-                $"Score: {GameAnalytics.Score}", 
+                $"Score: {GameAnalytics.Instance.Score}", 
                 new Vector2(35,202), 
                 Color.White);
             spriteBatch.DrawString(
@@ -96,7 +95,7 @@ namespace Match3Game.Scenes
 
         public void ButtonClickOK()
         {
-            GameAnalytics.Reset();
+            GameAnalytics.Instance.Reset();
             MouseClickDetector.Clear();
             ScenesManager.ChangeScene<StartScene>();
         }

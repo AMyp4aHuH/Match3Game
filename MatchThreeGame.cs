@@ -11,13 +11,10 @@ namespace Match3Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        private GameAnalytics gameAnalytics;
 
         public MatchThreeGame()
         {
             graphics = new GraphicsDeviceManager(this);
-            gameAnalytics = new GameAnalytics();
-            Scene.GameAnalytics = gameAnalytics;
         }
 
         protected override void Initialize()

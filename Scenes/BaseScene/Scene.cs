@@ -14,7 +14,6 @@ namespace Match3Game.Scenes
     public abstract class Scene : IGameElement
     {
         public static Point ScreenSize;
-        public static GameAnalytics GameAnalytics;
         protected List<IGameElement> gameElements = new List<IGameElement>();
 
         public abstract void Load(ContentManager content);

@@ -49,20 +49,18 @@ namespace Match3Game.MatrixElements
         private Cell selectedCellStart;
         private Cell selectedCellEnd;
         private TileFactory tileFactory;
-        private GameAnalytics gameAnalytics;
         private List<LineDestroyers> destroyers = new List<LineDestroyers>();
 
         /// <param name="size"> Rows or columns count. Matrix is always a cube. </param>
         /// <param name="cellSize"> Pixels count on Hight or Width (because we have a square <see cref="Tile"/>). </param>
         /// <param name="screenSize"> Heiht and width screen. Needed for display matrix on centre. </param>
         /// <param name="tileFactory"> Factory for creates tiles. </param>
-        public Matrix(int size, int cellSize, Point screenSize, TileFactory tileFactory, GameAnalytics gameAnalytics)
+        public Matrix(int size, int cellSize, Point screenSize, TileFactory tileFactory)
         {
             MatrixState.GameOver = false;
             CellSize = cellSize;
             this.tileFactory = tileFactory;
             this.tileFactory.tileDestroying += OnTileDestroying;
-            this.gameAnalytics = gameAnalytics;
             Rows = size;
             Columns = size;
             data = new Tile[Rows, Columns];
@@ -107,7 +105,7 @@ namespace Match3Game.MatrixElements
         {
             if (e.State != TileState.Destroy && e.State != TileState.WaitDestroy)
             {
-                gameAnalytics.Score += 1;
+                GameAnalytics.Instance.AddScore(1);
                 Cell positionInMatrix = e.PositionOnMatrix;
                 switch (e.TileType)
                 {
