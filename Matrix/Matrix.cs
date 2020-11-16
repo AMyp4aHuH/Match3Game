@@ -57,7 +57,6 @@ namespace Match3Game.MatrixElements
         /// <param name="tileFactory"> Factory for creates tiles. </param>
         public Matrix(int size, int cellSize, Point screenSize, TileFactory tileFactory)
         {
-            MatrixState.GameOver = false;
             CellSize = cellSize;
             this.tileFactory = tileFactory;
             this.tileFactory.tileDestroying += OnTileDestroying;
@@ -98,7 +97,12 @@ namespace Match3Game.MatrixElements
 
         public void ChangeState(MatrixState state)
         {
-            State = state;
+            if(!(State is EmptyState))
+            {
+                State.StateEnd();
+                State = state;
+                State.StateStart();
+            }
         }
 
         private void OnTileDestroying(object sender, TileEventArgs e)
@@ -161,6 +165,14 @@ namespace Match3Game.MatrixElements
                         break;
                 }
             }
+        }
+
+        /// <summary>
+        /// Execute when necessary to game over. Matrix change state on <see cref="EmptyState"/>
+        /// </summary>
+        public void GameOver()
+        {
+            ChangeState(new EmptyState(this));
         }
     }
 }

@@ -12,50 +12,6 @@ namespace Match3Game.MatrixElements
             public DestroyState(Matrix matrix, MatrixState oldState) : base(matrix)
             {
                 this.oldState = oldState;
-                Match match = new Match(matrix);
-
-                if(oldState is GenerateState) 
-                {
-                    var matches = match.SearchMatchAfterGenerate();
-
-                    if (matches.Count > 0) 
-                    {
-                        IsMatchAllMatrix = true;
-                        foreach (var cell in matches) 
-                        {
-                            cell.Tile.ChangeState(TileState.Destroy);
-                        }
-                        var specificTiles = match.GetSpecificTiles();
-                        if(specificTiles.Count > 0) 
-                        {
-                            foreach (var cell in specificTiles)
-                            {
-                                matrix[cell] = cell.Tile;
-                            }
-                        }
-                    }
-                }
-                else if(oldState is SwapState)
-                {
-                    var matches = match.SearchMatchAfterSwap(matrix.selectedCellStart, matrix.selectedCellEnd);
-
-                    if (matches.Count > 0)
-                    {
-                        IsMatchSwap = true;
-                        foreach (var cell in matches)
-                        {
-                            cell.Tile.ChangeState(TileState.Destroy);
-                        }
-                    }
-                    var specificTiles = match.GetSpecificTiles();
-                    if (specificTiles.Count > 0)
-                    {
-                        foreach (var cell in specificTiles)
-                        {
-                            matrix[cell] = cell.Tile;
-                        }
-                    }
-                }
             }
 
             public override void Update(int elapsedTime)
@@ -91,6 +47,54 @@ namespace Match3Game.MatrixElements
                 {
                     matrix.destroyers.Clear();
                     NextState();
+                }
+            }
+
+            public override void StateStart()
+            {
+                Match match = new Match(this.matrix);
+
+                if (oldState is GenerateState)
+                {
+                    var matches = match.SearchMatchAfterGenerate();
+
+                    if (matches.Count > 0)
+                    {
+                        IsMatchAllMatrix = true;
+                        foreach (var cell in matches)
+                        {
+                            cell.Tile.ChangeState(TileState.Destroy);
+                        }
+                        var specificTiles = match.GetSpecificTiles();
+                        if (specificTiles.Count > 0)
+                        {
+                            foreach (var cell in specificTiles)
+                            {
+                                matrix[cell] = cell.Tile;
+                            }
+                        }
+                    }
+                }
+                else if (oldState is SwapState)
+                {
+                    var matches = match.SearchMatchAfterSwap(matrix.selectedCellStart, matrix.selectedCellEnd);
+
+                    if (matches.Count > 0)
+                    {
+                        IsMatchSwap = true;
+                        foreach (var cell in matches)
+                        {
+                            cell.Tile.ChangeState(TileState.Destroy);
+                        }
+                    }
+                    var specificTiles = match.GetSpecificTiles();
+                    if (specificTiles.Count > 0)
+                    {
+                        foreach (var cell in specificTiles)
+                        {
+                            matrix[cell] = cell.Tile;
+                        }
+                    }
                 }
             }
 

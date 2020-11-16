@@ -28,8 +28,8 @@ namespace Match3Game.MatrixElements
         /// </summary>
         public static Cell GetCellByTilePosition(Vector2 position)
         {
-            int r = (int)((position.Y - Matrix.HeightIndent + Matrix.CellSize / 2) / Matrix.CellSize) ;
-            int c = (int)((position.X - Matrix.WidthIndent + Matrix.CellSize / 2 ) / Matrix.CellSize) ;
+            int r = (int)((position.Y - Matrix.HeightIndent + Matrix.CellSize / 2) / Matrix.CellSize);
+            int c = (int)((position.X - Matrix.WidthIndent + Matrix.CellSize / 2 ) / Matrix.CellSize);
 
             return new Cell(r, c);
         }

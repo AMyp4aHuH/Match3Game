@@ -15,6 +15,7 @@ namespace Match3Game.Scenes
     {
         private SpriteFont spriteFontScore;
         private Timer timer;
+        private Matrix matrix;
 
         public override void Load(ContentManager content)
         {
@@ -23,15 +24,15 @@ namespace Match3Game.Scenes
 
             spriteFontScore = FontProvider.DefaultFont;
 
-            Matrix matrix = new Matrix(
+            matrix = new Matrix(
                 8,
                 28,
                 ScreenSize,
                 new DefaultTileFactory()
                 );
 
-            timer = new Timer(60000);
-            timer.Action += StopGame;
+            timer = new Timer(1500);
+            timer.Action += GameOver;
 
             Sprite backgroundMatrix = new Sprite(TextureProvider.BackgroundMatrix);
             backgroundMatrix.Scale = 
@@ -70,10 +71,10 @@ namespace Match3Game.Scenes
             base.Update(elapsedTime);
         }
     
-        public void StopGame()
+        public void GameOver()
         {
-            MatrixState.GameOver = true;
             RemoveGameElement(timer);
+            matrix.GameOver();
 
             Sprite messageBackground = new Sprite(TextureProvider.MessageBoxBackground);
             messageBackground.Scale = 0.5f;

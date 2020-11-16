@@ -5,9 +5,6 @@ namespace Match3Game.MatrixElements
     {
         protected Matrix matrix;
 
-        /// <summary> Need to change value to true when Timer expires to game over. </summary>
-        public static bool GameOver = false;
-
         public MatrixState(Matrix matrix)
         {
             this.matrix = matrix;
@@ -30,5 +27,14 @@ namespace Match3Game.MatrixElements
             }
         }
 
+        public virtual void StateStart()
+        {
+
+        }
+
+        public virtual void StateEnd()
+        {
+
+        }
     }
 }

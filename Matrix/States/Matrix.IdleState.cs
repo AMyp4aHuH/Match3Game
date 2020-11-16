@@ -13,14 +13,12 @@ namespace Match3Game.MatrixElements
             {
                 matrix.selectedCellStart = null;
                 matrix.selectedCellEnd = null;
-                SubscribeOnMouseEvents();
             }
 
             public IdleState(Matrix matrix, MatrixState oldState) : base(matrix)
             {
                 matrix.selectedCellStart = null;
                 matrix.selectedCellEnd = null;
-                SubscribeOnMouseEvents();
             }
 
             public override void Update(int elapsedTime)
@@ -30,15 +28,29 @@ namespace Match3Game.MatrixElements
 
             public void NextState()
             {
-                UnsubscribeOnMouseEvents();
                 matrix.ChangeState(new SwapState(matrix, this));
             }
 
-            public void SetEndCellAndChangeState(int row, int column)
+            public override void StateStart()
             {
-                matrix.selectedCellEnd = new Cell(row, column);
-                matrix.selectedCellEnd.Tile = matrix[row, column];
-                NextState();
+                SubscribeOnMouseEvents();
+            }
+
+            public override void StateEnd()
+            {
+                UnsubscribeOnMouseEvents();
+            }
+
+            public void SubscribeOnMouseEvents()
+            {
+                MouseClickDetector.LeftButtonDown += OnSelectTile;
+                MouseClickDetector.LeftButtonSwipe += OnSwapTiles;
+            }
+
+            public void UnsubscribeOnMouseEvents()
+            {
+                MouseClickDetector.LeftButtonDown -= OnSelectTile;
+                MouseClickDetector.LeftButtonSwipe -= OnSwapTiles;
             }
 
             /// <returns> Return a cell with coordinates in matrix and Tile. </returns>
@@ -65,13 +77,6 @@ namespace Match3Game.MatrixElements
 
             public void OnSelectTile(object sender, MouseClickEventArgs args)
             {
-                if(GameOver)
-                {
-                    UnsubscribeOnMouseEvents();
-                    matrix.ChangeState(new EmptyState(matrix));
-                    return;
-                }
-
                 if (Keyboard.GetState().IsKeyDown(Keys.LeftControl))
                 {
                     Cell cell = GetSelectionCell(args.ClickPosition);
@@ -127,7 +132,6 @@ namespace Match3Game.MatrixElements
                         if (matrix.selectedCellEnd != null)
                         {
                             matrix.selectedCellEnd.Tile = matrix[matrix.selectedCellEnd.R, matrix.selectedCellEnd.C];
-                            UnsubscribeOnMouseEvents();
                             matrix.ChangeState(new SwapState(matrix, this));
                         }
                         else
@@ -141,66 +145,31 @@ namespace Match3Game.MatrixElements
 
             public void OnSwapTiles(object sender, MouseSwipeEventArgs args)
             {
-                if (GameOver)
-                {
-                    UnsubscribeOnMouseEvents();
-                    matrix.ChangeState(new EmptyState(matrix));
-                    return;
-                }
-
                 if (matrix.selectedCellStart != null)
                 {
                     switch (args.SwipeDirection)
                     {
                         case Direction.Left:
                             {
-                                if (0 < matrix.selectedCellStart.C)
-                                {
-                                    SetEndCellAndChangeState(matrix.selectedCellStart.R, matrix.selectedCellStart.C - 1);
-                                }
-                                else
-                                {
-                                    DontSwap();
-                                }
+                                Swap(matrix.selectedCellStart.R, matrix.selectedCellStart.C - 1);
                                 break;
                             }
 
                         case Direction.Up:
                             {
-                                if (0 < matrix.selectedCellStart.R)
-                                {
-                                    SetEndCellAndChangeState(matrix.selectedCellStart.R - 1, matrix.selectedCellStart.C);
-                                }
-                                else
-                                {
-                                    DontSwap();
-                                }
+                                Swap(matrix.selectedCellStart.R - 1, matrix.selectedCellStart.C);
                                 break;
                             }
 
                         case Direction.Right:
                             {
-                                if (matrix.selectedCellStart.C < matrix.Columns - 1)
-                                {
-                                    SetEndCellAndChangeState(matrix.selectedCellStart.R, matrix.selectedCellStart.C + 1);
-                                }
-                                else
-                                {
-                                    DontSwap();
-                                }
+                                Swap(matrix.selectedCellStart.R, matrix.selectedCellStart.C + 1);
                                 break;
                             }
 
                         case Direction.Down:
                             {
-                                if (matrix.selectedCellStart.R < matrix.Rows - 1)
-                                {
-                                    SetEndCellAndChangeState(matrix.selectedCellStart.R + 1, matrix.selectedCellStart.C);
-                                }
-                                else
-                                {
-                                    DontSwap();
-                                }
+                                Swap(matrix.selectedCellStart.R + 1, matrix.selectedCellStart.C);
                                 break;
                             }
 
@@ -215,6 +184,13 @@ namespace Match3Game.MatrixElements
                     }
                 }
 
+                void Swap(int row, int column)
+                {
+                    matrix.selectedCellEnd = new Cell(row, column);
+                    matrix.selectedCellEnd.Tile = matrix[row, column];
+                    NextState();
+                }
+
                 void DontSwap()
                 {
                     matrix.selectedCellStart.Tile.ChangeState(TileState.Idle);
@@ -222,18 +198,7 @@ namespace Match3Game.MatrixElements
                     matrix.selectedCellEnd = null;
                 }
             }
-        
-            public void SubscribeOnMouseEvents()
-            {
-                MouseClickDetector.LeftButtonDown += OnSelectTile;
-                MouseClickDetector.LeftButtonSwipe += OnSwapTiles;
-            }
-
-            public void UnsubscribeOnMouseEvents()
-            {
-                MouseClickDetector.LeftButtonDown -= OnSelectTile;
-                MouseClickDetector.LeftButtonSwipe -= OnSwapTiles;
-            }
+            
         }
     }
 }
