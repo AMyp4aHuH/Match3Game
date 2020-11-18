@@ -31,7 +31,7 @@ namespace Match3Game.Scenes
                 new DefaultTileFactory()
                 );
 
-            timer = new Timer(1500);
+            timer = new Timer(60000);
             timer.Action += GameOver;
 
             Sprite backgroundMatrix = new Sprite(TextureProvider.BackgroundMatrix);
