@@ -162,7 +162,7 @@ namespace Match3Game.MatrixElements.Destroyers
 
         private void GoRight()
         {
-            destroyerTwo = new Destroyer();
+            destroyerTwo = tileFactory.CreateDestoyer();
             destroyerTwo.Move(
                 PositionConverter.GetPositionsOnScreen(r: lineBonus.R, c: lineBonus.C + 1),
                 PositionConverter.GetPositionsOnScreen(r: lineBonus.R, c: matrix.Columns - 1)
@@ -171,7 +171,7 @@ namespace Match3Game.MatrixElements.Destroyers
 
         private void GoUp()
         {
-            destroyerOne = new Destroyer();
+            destroyerOne = tileFactory.CreateDestoyer();
             destroyerOne.Move(
                 PositionConverter.GetPositionsOnScreen(r: lineBonus.R - 1, c: lineBonus.C),
                 PositionConverter.GetPositionsOnScreen(r: 0, c: lineBonus.C)

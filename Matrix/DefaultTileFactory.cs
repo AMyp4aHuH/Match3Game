@@ -34,18 +34,14 @@ namespace Match3Game.MatrixElements
 
         private Tile CreateTile(int index, Cell cell)
         {
-            Tile tile = Activator.CreateInstance(TileTypes[index]) as Tile;
-            tile.SetPosition(cell);
-            tile.Destroying += tileDestroying;
+            Tile tile = CreateTile(TileTypes[index], cell);
             tile.Type = TileType.Default;
             return tile;
         }
 
         public override Tile CreateRandomTile(Cell cell)
         {
-            Tile tile = Activator.CreateInstance(TileTypes[rnd.Next(0, TileTypes.Length)]) as Tile;
-            tile.SetPosition(cell);
-            tile.Destroying += tileDestroying;
+            Tile tile = CreateTile(TileTypes[rnd.Next(0, TileTypes.Length)], cell);
             return tile;
         }
     }

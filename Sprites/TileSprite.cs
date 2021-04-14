@@ -28,24 +28,25 @@ namespace Match3Game.Sprites
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (foreground != null)
-            {
-                spriteBatch.Draw(
-                   foreground,
-                   PositionOnScreen,
-                   new Rectangle(currentFrame.X * frame.Width, currentFrame.Y * frame.Height, frame.Width, frame.Height),
-                   Color.White
-                   );
-            }
+            base.Draw(spriteBatch);
 
             if (detail != null)
             {
                 spriteBatch.Draw(
                     detail,
                     PositionOnScreen,
-                    new Rectangle(currentFrame.X * frame.Width, currentFrame.Y * frame.Height, frame.Width, frame.Height),
-                    Color.White
-                    );
+                    new Rectangle(
+                        currentFrame.X * frame.Width,
+                        currentFrame.Y * frame.Height,
+                        frame.Width, frame.Height
+                        ),
+                    Color.White,
+                    0,
+                    Vector2.Zero,
+                    Scale,
+                    SpriteEffects.None,
+                    0
+                );
             }
         }
 
