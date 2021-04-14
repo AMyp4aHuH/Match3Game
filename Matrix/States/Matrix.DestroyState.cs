@@ -3,7 +3,7 @@ namespace Match3Game.MatrixElements
 {
     public partial class Matrix
     {
-        public class DestroyState : MatrixState
+        private class DestroyState : MatrixState
         {
             private MatrixState oldState;
             private bool IsMatchSwap = false;

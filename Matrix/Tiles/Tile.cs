@@ -17,7 +17,7 @@ namespace Match3Game.MatrixElements
         public Tile()
         {
             State = TileState.Idle;
-            this.Type = TileType.Default;
+            Type = TileType.Default;
         }
 
         public void SetPosition(Cell position)

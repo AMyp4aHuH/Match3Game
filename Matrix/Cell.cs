@@ -24,7 +24,7 @@ namespace Match3Game.MatrixElements
             if (other is null)
                 return false;
 
-            return this.R == other.R && this.C == other.C;
+            return R == other.R && C == other.C;
         }
 
         public override bool Equals(object obj) => Equals(obj as Cell);

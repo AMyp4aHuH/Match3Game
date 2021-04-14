@@ -5,7 +5,7 @@ namespace Match3Game.MatrixElements
 {
     public partial class Matrix
     {
-        public class Match
+        private class Match
         {
             private Matrix matrix;
             private List<Cell> specificTiles = new List<Cell>();

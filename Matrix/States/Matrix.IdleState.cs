@@ -7,7 +7,7 @@ namespace Match3Game.MatrixElements
 {
     public partial class Matrix
     {
-        public class IdleState : MatrixState
+        private class IdleState : MatrixState
         {
             public IdleState(Matrix matrix) : base(matrix)
             {

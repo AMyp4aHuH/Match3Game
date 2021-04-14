@@ -4,7 +4,7 @@ namespace Match3Game.MatrixElements
 {
     public partial class Matrix
     {
-        public class GenerateState : MatrixState
+        private class GenerateState : MatrixState
         {
             public GenerateState(Matrix matrix) : base(matrix)
             {

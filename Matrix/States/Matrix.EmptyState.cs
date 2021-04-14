@@ -4,7 +4,7 @@ namespace Match3Game.MatrixElements
 {
     public partial class Matrix
     {
-        public class EmptyState : MatrixState
+        private class EmptyState : MatrixState
         {
             public EmptyState(Matrix matrix) : base(matrix)
             {

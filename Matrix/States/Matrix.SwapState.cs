@@ -6,7 +6,7 @@ namespace Match3Game.MatrixElements
 {
     public partial class Matrix
     {
-        class SwapState : MatrixState
+        private class SwapState : MatrixState
         {
             private MatrixState oldState;
 
