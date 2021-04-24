@@ -11,13 +11,13 @@ namespace Match3Game.Scenes
         {
             Sprite background = new Sprite(TextureProvider.Background);
             background.DisplayOnCenterScreen();
-            AddGameElement(background);
+            AddChild(background);
 
             Button buttonPlay = new Button(TextureProvider.ButtonBackground, FontProvider.DefaultFont, "Play");
             buttonPlay.Scale = 0.5f;
             buttonPlay.DisplayOnCenterScreen();
             buttonPlay.Click += ButtonClickPlay;
-            AddGameElement(buttonPlay);
+            AddChild(buttonPlay);
         }
 
         public void ButtonClickPlay()

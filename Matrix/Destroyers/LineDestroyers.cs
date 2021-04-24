@@ -11,8 +11,8 @@ namespace Match3Game.MatrixElements.Destroyers
     public class LineDestroyers
     {
         private Cell lineBonus;
-        private Destroyer destroyerOne;
-        private Destroyer destroyerTwo;
+        private Destroyer firstDestroyer;
+        private Destroyer secondDestroyer;
         private Matrix matrix;
         private TileFactory tileFactory;
 
@@ -72,14 +72,14 @@ namespace Match3Game.MatrixElements.Destroyers
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            destroyerOne?.Draw(spriteBatch);
-            destroyerTwo?.Draw(spriteBatch);
+            firstDestroyer?.Draw(spriteBatch);
+            secondDestroyer?.Draw(spriteBatch);
         }
 
         public void Update(int elapsedTime)
         {
-            UpdateDestroyer(destroyerOne, elapsedTime);
-            UpdateDestroyer(destroyerTwo, elapsedTime);
+            UpdateDestroyer(firstDestroyer, elapsedTime);
+            UpdateDestroyer(secondDestroyer, elapsedTime);
         }
 
         public void UpdateDestroyer(Destroyer destroyer, int elapsedTime)
@@ -153,8 +153,8 @@ namespace Match3Game.MatrixElements.Destroyers
 
         private void GoLeft()
         {
-            destroyerOne = tileFactory.CreateDestoyer();
-            destroyerOne.Move(
+            firstDestroyer = tileFactory.CreateDestoyer();
+            firstDestroyer.Move(
                 PositionConverter.GetPositionsOnScreen(r: lineBonus.R, c: lineBonus.C - 1),
                 PositionConverter.GetPositionsOnScreen(r: lineBonus.R, c: 0)
                 );
@@ -162,8 +162,8 @@ namespace Match3Game.MatrixElements.Destroyers
 
         private void GoRight()
         {
-            destroyerTwo = tileFactory.CreateDestoyer();
-            destroyerTwo.Move(
+            secondDestroyer = tileFactory.CreateDestoyer();
+            secondDestroyer.Move(
                 PositionConverter.GetPositionsOnScreen(r: lineBonus.R, c: lineBonus.C + 1),
                 PositionConverter.GetPositionsOnScreen(r: lineBonus.R, c: matrix.Columns - 1)
                 );
@@ -171,8 +171,8 @@ namespace Match3Game.MatrixElements.Destroyers
 
         private void GoUp()
         {
-            destroyerOne = tileFactory.CreateDestoyer();
-            destroyerOne.Move(
+            firstDestroyer = tileFactory.CreateDestoyer();
+            firstDestroyer.Move(
                 PositionConverter.GetPositionsOnScreen(r: lineBonus.R - 1, c: lineBonus.C),
                 PositionConverter.GetPositionsOnScreen(r: 0, c: lineBonus.C)
                 );
@@ -180,8 +180,8 @@ namespace Match3Game.MatrixElements.Destroyers
 
         private void GoDown()
         {
-            destroyerTwo = new Destroyer();
-            destroyerTwo.Move(
+            secondDestroyer = new Destroyer();
+            secondDestroyer.Move(
                 PositionConverter.GetPositionsOnScreen(r: lineBonus.R + 1, c: lineBonus.C),
 
                 PositionConverter.GetPositionsOnScreen(r: matrix.Rows - 1, c: lineBonus.C)
@@ -189,32 +189,32 @@ namespace Match3Game.MatrixElements.Destroyers
                 );
         }
 
-        public bool IsEnd()
+        public bool IsAlive()
         {
-            return IsDestroyerOneEnd() && IsDestroyerTwoEnd();
+            return IsFirstDestroyerAlive() && IsSecondDestroyerAlive();
         }
 
-        private bool IsDestroyerOneEnd()
+        private bool IsFirstDestroyerAlive()
         {
-            if(destroyerOne is null)
+            if(firstDestroyer is null)
             {
                 return true;
             }
             else 
             {
-                return destroyerOne.State == DestroyerState.Empty;
+                return firstDestroyer.State == DestroyerState.Empty;
             }
         }
        
-        private bool IsDestroyerTwoEnd()
+        private bool IsSecondDestroyerAlive()
         {
-            if (destroyerTwo is null)
+            if (secondDestroyer is null)
             {
                 return true;
             }
             else
             {
-                return destroyerTwo.State == DestroyerState.Empty;
+                return secondDestroyer.State == DestroyerState.Empty;
             }
         }
     }

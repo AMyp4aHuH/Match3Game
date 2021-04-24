@@ -1,26 +1,22 @@
-﻿using Match3Game.Common;
-using Match3Game.Interfaces;
+﻿using Match3Game.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Match3Game.Scenes
 {
-    public abstract class Scene : IGameElement
+    public abstract class Scene : IComponent
     {
         public static Point ScreenSize;
+
         protected List<IGameElement> gameElements = new List<IGameElement>();
 
         public abstract void Load(ContentManager content);
 
-        public void AddGameElement(IGameElement element) => gameElements.Add(element);
+        public void AddChild(IGameElement element) => gameElements.Add(element);
 
-        public void RemoveGameElement(IGameElement element) => gameElements.Remove(element);
+        public void RemoveChild(IGameElement element) => gameElements.Remove(element);
 
         public void Clear() => gameElements.Clear();
 

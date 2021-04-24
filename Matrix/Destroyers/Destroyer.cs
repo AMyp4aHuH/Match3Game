@@ -22,7 +22,7 @@ namespace Match3Game.MatrixElements.Destroyers
             {
                 case DestroyerState.Create:
                     {
-                        if (!DisplayCreate(milliseconds))
+                        if (!NextCreateAnimationFrame(milliseconds))
                         {
                             State = DestroyerState.Move;
                         }
@@ -30,7 +30,7 @@ namespace Match3Game.MatrixElements.Destroyers
                     }
                 case DestroyerState.Destroy:
                     {
-                        if (!DisplayDestroy(milliseconds))
+                        if (!NextDestroyAnimationFrame(milliseconds))
                         {
                             State = DestroyerState.Empty;
                         }
@@ -38,7 +38,7 @@ namespace Match3Game.MatrixElements.Destroyers
                     }
                 case DestroyerState.Move:
                     {
-                        if(!DisplayMove(milliseconds))
+                        if(!NextMoveAnimationFrame(milliseconds))
                         {
                             State = DestroyerState.Destroy;
                         }

@@ -39,7 +39,7 @@ namespace Match3Game.MatrixElements
                     for (int i = 0; i < matrix.destroyers.Count; i++)
                     {
                         matrix.destroyers[i].Update(elapsedTime);
-                        IsDestroyersEnd = matrix.destroyers[i].IsEnd();
+                        IsDestroyersEnd = matrix.destroyers[i].IsAlive();
                     }
                 }
 

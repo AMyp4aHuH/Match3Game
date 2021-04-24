@@ -47,11 +47,11 @@ namespace Match3Game.Scenes
             backgroundScore.DisplayOnCenterScreen();
             backgroundScore.PositionOnScreen = new Vector2(20, backgroundScore.PositionOnScreen.Y);
 
-            AddGameElement(background);
-            AddGameElement(backgroundScore);
-            AddGameElement(backgroundMatrix);
-            AddGameElement(matrix);
-            AddGameElement(timer);
+            AddChild(background);
+            AddChild(backgroundScore);
+            AddChild(backgroundMatrix);
+            AddChild(matrix);
+            AddChild(timer);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -76,7 +76,7 @@ namespace Match3Game.Scenes
     
         public void GameOver()
         {
-            RemoveGameElement(timer);
+            RemoveChild(timer);
             matrix.GameOver();
 
             Sprite messageBackground = new Sprite(TextureProvider.MessageBoxBackground);
@@ -92,9 +92,9 @@ namespace Match3Game.Scenes
             buttonOk.DisplayOnCenterSprite(messageBackground, 5, 20);
             buttonOk.Click += ButtonClickOK;
 
-            AddGameElement(messageBackground);
-            AddGameElement(messageSprite);
-            AddGameElement(buttonOk);
+            AddChild(messageBackground);
+            AddChild(messageSprite);
+            AddChild(buttonOk);
         }
 
         public void ButtonClickOK()

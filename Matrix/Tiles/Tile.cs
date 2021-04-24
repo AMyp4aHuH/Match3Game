@@ -36,13 +36,13 @@ namespace Match3Game.MatrixElements
             {
                 case TileState.Idle:
                     {
-                        DisplayIdle();
+                        NextIdleAnimationFrame();
                         break;
                     }
 
                 case TileState.Move:
                     {
-                        if(!DisplayMove(elapsedTime))
+                        if (!NextMoveAnimationFrame(elapsedTime))
                         {
                             State = TileState.Idle;
                         }
@@ -51,13 +51,13 @@ namespace Match3Game.MatrixElements
 
                 case TileState.Select:
                     {
-                        DisplaySelect(elapsedTime);
+                        NextSelectAnimationFrame(elapsedTime);
                         break;
                     }     
 
                 case TileState.Destroy:
                     {
-                        if(!DisplayDestroy(elapsedTime))
+                        if (!NextDestroyAnimationFrame(elapsedTime))
                         {
                             State = TileState.Empty;
                         }
@@ -66,7 +66,7 @@ namespace Match3Game.MatrixElements
                 
                 case TileState.WaitDestroy:
                     {
-                        if (!DisplayWaitDestroy(elapsedTime))
+                        if (!NextWaitDestroyAnimationFrame(elapsedTime))
                         {
                             ChangeState(TileState.Destroy);
                         }

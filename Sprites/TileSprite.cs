@@ -50,13 +50,13 @@ namespace Match3Game.Sprites
             }
         }
 
-        public void DisplayIdle()
+        public void NextIdleAnimationFrame()
         {
             elapsedTime = 0;
             currentFrame = new Point(0, 0);
         }
 
-        public void DisplaySelect(int elapsedTime)
+        public void NextSelectAnimationFrame(int elapsedTime)
         {
             this.elapsedTime += elapsedTime;
             if (this.elapsedTime >= selectPeriod)
@@ -74,7 +74,7 @@ namespace Match3Game.Sprites
             }
         }
 
-        public bool DisplayMove(int elapsedTime)
+        public bool NextMoveAnimationFrame(int elapsedTime)
         {
             currentFrame = new Point(0, 0);
             this.elapsedTime += elapsedTime;
@@ -89,13 +89,13 @@ namespace Match3Game.Sprites
             }
             else
             {
-                DisplayIdle();
+                NextIdleAnimationFrame();
                 return false;
             }
             return true;
         }
 
-        public bool DisplayDestroy(int elapsedTime)
+        public bool NextDestroyAnimationFrame(int elapsedTime)
         {
             this.elapsedTime += elapsedTime;
             if (this.elapsedTime >= destroyPeriod)
@@ -116,7 +116,7 @@ namespace Match3Game.Sprites
             return true;
         }
 
-        public bool DisplayWaitDestroy(int elapsedTime)
+        public bool NextWaitDestroyAnimationFrame(int elapsedTime)
         {
             this.elapsedTime += elapsedTime;
             if (this.elapsedTime >= waitDestroyDelay)
@@ -130,7 +130,7 @@ namespace Match3Game.Sprites
             }
         }
 
-        public bool DisplayCreate(int elapsedTime)
+        public bool NextCreateAnimationFrame(int elapsedTime)
         {
             this.elapsedTime += elapsedTime;
             if (this.elapsedTime >= createPeriod)
