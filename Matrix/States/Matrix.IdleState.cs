@@ -186,6 +186,15 @@ namespace Match3Game.MatrixElements
 
                 void Swap(int row, int column)
                 {
+                    if (row < 0 || 
+                        row >= matrix.Rows ||
+                        column < 0 ||
+                        column >= matrix.Columns)
+                    {
+                        DontSwap();
+                        return;
+                    }
+
                     matrix.selectedCellEnd = new Cell(row, column);
                     matrix.selectedCellEnd.Tile = matrix[row, column];
                     NextState();

@@ -180,12 +180,10 @@ namespace Match3Game.MatrixElements.Destroyers
 
         private void GoDown()
         {
-            secondDestroyer = new Destroyer();
+            secondDestroyer = tileFactory.CreateDestoyer();
             secondDestroyer.Move(
                 PositionConverter.GetPositionsOnScreen(r: lineBonus.R + 1, c: lineBonus.C),
-
                 PositionConverter.GetPositionsOnScreen(r: matrix.Rows - 1, c: lineBonus.C)
-
                 );
         }
 
