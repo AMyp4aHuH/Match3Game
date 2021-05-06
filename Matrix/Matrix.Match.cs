@@ -15,7 +15,7 @@ namespace Match3Game.MatrixElements
                 this.matrix = matrix;
             }
 
-            /// <returns> Destroy list. </returns>
+            /// <returns> List to destroy. </returns>
             public List<Cell> SearchMatchAfterSwap(Cell clickCellStart, Cell clickCellEnd)
             {
                 var hMatch = new List<Cell>();
@@ -50,7 +50,7 @@ namespace Match3Game.MatrixElements
                 return match;
             }
 
-            /// <returns> Destroy list. </returns>
+            /// <returns> List to destroy. </returns>
             public List<Cell> SearchMatchAfterGenerate()
             {
                 // Matches in all rows.

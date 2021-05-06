@@ -4,19 +4,19 @@ namespace Match3Game.MatrixElements
 {
     public class Cell : IEquatable<Cell>
     {
-        public int R;
-        public int C;
+        public int R { get; private set; }
+        public int C { get; private set; }
         public Tile Tile;
 
-        public Cell(int R, int C)
+        public Cell(int r, int c)
         {
-            this.R = R;
-            this.C = C;
+            R = r;
+            C = c;
         }
 
-        public Cell(int R, int C, Tile Tile): this(R, C)
+        public Cell(int r, int c, Tile tile): this(r, c)
         {
-            this.Tile = Tile;
+            Tile = tile;
         }
 
         public bool Equals(Cell other)

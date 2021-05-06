@@ -12,13 +12,13 @@ namespace Match3Game.Interfaces
     public interface IComponent : IGameElement
     {
         /// <summary>
-        /// Adds game component for update and drowing.
+        /// Adds game element for update and drawing.
         /// </summary>
         /// <param name="component"></param>
         void AddChild(IGameElement component);
 
         /// <summary>
-        /// Removes game component.
+        /// Removes game element.
         /// </summary>
         void RemoveChild(IGameElement component);
     }
