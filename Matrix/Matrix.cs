@@ -4,6 +4,7 @@ using Match3Game.Interfaces;
 using Match3Game.Common;
 using System.Collections.Generic;
 using Match3Game.MatrixElements.Destroyers;
+using System;
 
 namespace Match3Game.MatrixElements
 {
@@ -15,11 +16,11 @@ namespace Match3Game.MatrixElements
         {
             get
             {
-                return this.data[r, c];
+                return data[r, c];
             }
             set
             {
-                this.data[r, c] = value;
+                data[r, c] = value;
             }
         }
 
@@ -52,19 +53,49 @@ namespace Match3Game.MatrixElements
         private List<LineDestroyers> destroyers = new List<LineDestroyers>();
 
         /// <param name="size"> Rows or columns count. Matrix is always a cube. </param>
-        /// <param name="cellSize"> Pixels count on Hight or Width (because we have a square <see cref="Tile"/>). </param>
-        /// <param name="screenSize"> Heiht and width screen. Needed for display matrix on centre. </param>
+        /// <param name="matrixScale"> 
+        /// Scale relative to the smallest side of the game screen. 
+        /// For example, if Scale = 1 then the side of the matrix = the smallest side of the screen. 
+        /// If you need to indent 5% (relative to the smallest side) from the near side of the screen, then set Scalee to 0.9f
+        /// </param>
+        /// <param name="tileScale">
+        /// Tile scale relative to the matrix cell. For example, if scale = 1, then the tile will occupy the entire cell. 
+        /// </param>
+        /// <param name="screenSize"> Height and width screen. Needed for display matrix on center and matrix resize. </param>
         /// <param name="tileFactory"> Factory for creates tiles. </param>
-        public Matrix(int size, int cellSize, Point screenSize, TileFactory tileFactory)
+        public Matrix(int size, float matrixScale, float tileScale, Point screenSize, TileFactory tileFactory)
         {
-            CellSize = cellSize;
+            ConfiguringMatrix(size, matrixScale, tileScale, screenSize, tileFactory);
+        }
+
+        public void ConfiguringMatrix(int size, float matrixScale, float tileScale, Point screenSize, TileFactory tileFactory)
+        {
+            if (matrixScale > 1 || matrixScale < 0.5)
+            {
+                throw new System.ArgumentException("Margin must be between 1 and 0,5.");
+            }
+
+            int minScreenSide = Math.Min(screenSize.X, screenSize.Y);
+
+            CellSize = Convert.ToInt32((minScreenSide * matrixScale) / size);
+
+            // We need tile for get his size.
+            var defaultTile = tileFactory.CreateRandomTile(new Cell(0, 0));
+
+            // Calculate and set scale for tiles.
+            tileFactory.TileScale = ((float)CellSize / (float)defaultTile.Size) * (tileScale);
+
             this.tileFactory = tileFactory;
             this.tileFactory.tileDestroying += OnTileDestroying;
+
             Rows = size;
             Columns = size;
+
             data = new Tile[Rows, Columns];
+
             HeightIndent = (screenSize.Y - Rows * CellSize) / 2;
             WidthIndent = (screenSize.X - Columns * CellSize) / 2;
+
             State = new GenerateState(this);
         }
 

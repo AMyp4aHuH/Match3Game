@@ -11,6 +11,11 @@ namespace Match3Game.MatrixElements
 
         public TileState State { get; private set; }
 
+        /// <summary>
+        /// Size Tile in pixels (tile is square).
+        /// </summary>
+        public int Size => frame.Height / spriteSize.Y;
+
         public delegate void TileDestroy(object sender, TileEventArgs e);
         public event TileDestroy Destroying;
 
@@ -24,6 +29,7 @@ namespace Match3Game.MatrixElements
         {
             var windthIndentInsideCell = (Matrix.CellSize - Rectangle.Width) / 2;
             var heightIndentInsideCell = (Matrix.CellSize - Rectangle.Height) / 2;
+
             PositionOnScreen = new Vector2(
                 position.C * Matrix.CellSize + Matrix.WidthIndent + windthIndentInsideCell,
                 position.R * Matrix.CellSize + Matrix.HeightIndent + heightIndentInsideCell

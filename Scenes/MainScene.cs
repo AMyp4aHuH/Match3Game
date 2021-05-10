@@ -25,11 +25,11 @@ namespace Match3Game.Scenes
             spriteFontScore = FontProvider.DefaultFont;
 
             var tileFactory = new DefaultTileFactory();
-            tileFactory.TileScale = 1.5f;
 
             matrix = new Matrix(
                 8,
-                40,
+                0.7f,
+                0.9f,
                 ScreenSize,
                 tileFactory
                 );
