@@ -10,7 +10,8 @@ Example:
 ```csharp
 Matrix matrix = new Matrix(
   8,                          // Matrix size 8x8.
-  30,                         // Cell size 30x30.
+  0.7f,                       // Matrix scale relative to the smallest side of the game screen.
+  0.9f,                       // Tile scale relative to the matrix cell.
   new Point(800, 480),        // Game window size.
   new DefaultTileFactory()    // Tile factory.
 );
