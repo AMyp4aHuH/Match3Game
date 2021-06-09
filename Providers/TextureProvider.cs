@@ -1,80 +1,148 @@
 ﻿using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Match3Game.Providers
 {
     public static class TextureProvider
     {
-        public static ContentManager Content { private get; set; }
+        public static ContentManager Content { get; set; }
 
-        #region DefaultTilesTextures
+        public static class BlueTile
+        {
+            public static TileTextures Textures;
+            static BlueTile()
+            {
+                Textures = new TileTextures(@"Tiles/bIdle", @"Tiles/bDestroy", @"Tiles/bDestroy");
+            }
+        }
 
-        private static Texture2D destroyerTileTexture;
-        public static Texture2D DestroyerTexture => 
-            destroyerTileTexture is null ? destroyerTileTexture = Content.Load<Texture2D>(@"Tiles/tileDestroyer") : destroyerTileTexture;
+        public static class YellowTile 
+        {
+            public static TileTextures Textures;
+            static YellowTile()
+            {
+                Textures = new TileTextures(@"Tiles/yIdle", @"Tiles/yDestroy", @"Tiles/yDestroy");
+            }
+        }
 
-        private static Texture2D pinkDefaultTexture;
-        public static Texture2D PinkDefaultTexture =>
-            pinkDefaultTexture is null ? pinkDefaultTexture = Content.Load<Texture2D>(@"Tiles/pinkTile") : pinkDefaultTexture;
+        public static class GreenTile 
+        {
+            public static TileTextures Textures;
+            static GreenTile()
+            {
+                Textures = new TileTextures(@"Tiles/gIdle", @"Tiles/gDestroy", @"Tiles/gDestroy");
+            }
+        }
 
-        private static Texture2D purpleDefaultTexture;
-        public static Texture2D PurpleDefaultTexture =>
-            purpleDefaultTexture is null ? purpleDefaultTexture = Content.Load<Texture2D>(@"Tiles/purpleTile") : purpleDefaultTexture;
+        public static class PinkTile 
+        {
+            public static TileTextures Textures;
+            static PinkTile()
+            {
+                Textures = new TileTextures(@"Tiles/piIdle", @"Tiles/piDestroy", @"Tiles/piDestroy");
+            }
+        }
 
-        private static Texture2D greenDefaultTexture;
-        public static Texture2D GreenDefaultTexture =>
-            greenDefaultTexture is null ? greenDefaultTexture = Content.Load<Texture2D>(@"Tiles/greenTile") : greenDefaultTexture;
+        public static class PurpleTile 
+        {
+            public static TileTextures Textures;
+            static PurpleTile()
+            {
+                Textures = new TileTextures(@"Tiles/pIdle", @"Tiles/pDestroy", @"Tiles/pDestroy");
+            }
+        }
 
-        private static Texture2D yellowDefaultTexture;
-        public static Texture2D YellowDefaultTexture =>
-            yellowDefaultTexture is null ? yellowDefaultTexture = Content.Load<Texture2D>(@"Tiles/yellowTile") : yellowDefaultTexture;
+        public static class DarkTile 
+        {
+            public static TileTextures Textures;
+            static DarkTile()
+            {
+                Textures = new TileTextures(@"Tiles/dIdle", @"Tiles/Destroy", @"Tiles/dDestroy", @"Tiles/dCreate");
+            }
+        }
 
-        private static Texture2D blueDefaultTexture;
-        public static Texture2D BlueDefaultTexture =>
-            blueDefaultTexture is null ? blueDefaultTexture = Content.Load<Texture2D>(@"Tiles/blueTile") : blueDefaultTexture;
+        public static class HorizontalLineTile
+        {
+            public static TileTextures Textures;
+            static HorizontalLineTile()
+            {
+                Textures = new TileTextures(@"Tiles/hIdle", @"Tiles/hDestroy", @"Tiles/hDestroy");
+            }
+        }
 
-        private static Texture2D verticaDefaultlLineTexture;
-        public static Texture2D VerticaDefaultlLineTexture =>
-            verticaDefaultlLineTexture is null ? verticaDefaultlLineTexture = Content.Load<Texture2D>(@"Tiles/verticalDetail") : verticaDefaultlLineTexture;
+        public static class VerticalLineTile
+        {
+            public static TileTextures Textures;
+            static VerticalLineTile()
+            {
+                Textures = new TileTextures(@"Tiles/vIdle", @"Tiles/vDestroy", @"Tiles/vDestroy");
+            }
+        }
 
-        private static Texture2D horizontalDefaultLineTexture;
-        public static Texture2D HorizontalDefaultLineTexture =>
-            horizontalDefaultLineTexture is null ? horizontalDefaultLineTexture = Content.Load<Texture2D>(@"Tiles/horizontalDetail") : horizontalDefaultLineTexture;
+        public static class BombTile
+        {
+            public static TileTextures Textures;
+            static BombTile()
+            {
+                Textures = new TileTextures(@"Tiles/bombIdle", @"Tiles/bombDestroy", @"Tiles/bombDestroy");
+            }
+        }
 
-        private static Texture2D bombDefaultTexture;
-        public static Texture2D BombDefaultTexture =>
-            bombDefaultTexture is null ? bombDefaultTexture = Content.Load<Texture2D>(@"Tiles/bomb") : bombDefaultTexture;
+        public static class Common
+        {
+            private static Texture2D background;
+            public static Texture2D Background =>
+                background is null ? background = Content.Load<Texture2D>(@"background") : background;
 
-        #endregion
+            private static Texture2D backgroundMatrix;
+            public static Texture2D BackgroundMatrix =>
+                backgroundMatrix is null ? backgroundMatrix = Content.Load<Texture2D>(@"Common/matrixBackground") : backgroundMatrix;
 
-        #region CommonTextures
+            private static Texture2D messageBoxBackground;
+            public static Texture2D MessageBoxBackground =>
+                messageBoxBackground is null ? messageBoxBackground = Content.Load<Texture2D>(@"Common/messageBoxBackground") : messageBoxBackground;
 
-        private static Texture2D background;
-        public static Texture2D Background =>
-            background is null ? background = Content.Load<Texture2D>(@"background") : background;
+            private static Texture2D scoreBackground;
+            public static Texture2D ScoreBackground =>
+                scoreBackground is null ? scoreBackground = Content.Load<Texture2D>(@"Common/scoreBackground") : scoreBackground;
 
-        private static Texture2D backgroundMatrix;
-        public static Texture2D BackgroundMatrix =>
-            backgroundMatrix is null ? backgroundMatrix = Content.Load<Texture2D>(@"Common/matrixBackground") : backgroundMatrix;
+            private static Texture2D buttonBackground;
+            public static Texture2D ButtonBackground =>
+                buttonBackground is null ? buttonBackground = Content.Load<Texture2D>(@"Buttons/buttonBackground") : buttonBackground;
+        }
+    }
 
-        private static Texture2D messageBoxBackground;
-        public static Texture2D MessageBoxBackground =>
-            messageBoxBackground is null ? messageBoxBackground = Content.Load<Texture2D>(@"Common/messageBoxBackground") : messageBoxBackground;
 
-        private static Texture2D scoreBackground;
-        public static Texture2D ScoreBackground =>
-            scoreBackground is null ? scoreBackground = Content.Load<Texture2D>(@"Common/scoreBackground") : scoreBackground;
+    public class TileTextures
+    {
+        private readonly string createPath; // Only destroyers.
+        private readonly string idlePath;
+        private readonly string selectPath;
+        private readonly string destroyPath;
+        
 
-        private static Texture2D buttonBackground;
-        public static Texture2D ButtonBackground =>
-            buttonBackground is null ? buttonBackground = Content.Load<Texture2D>(@"Buttons/buttonBackground") : buttonBackground;
+        public TileTextures(string idleTexturePath, string selectTexturePath, string destroyTexturePath, string createTextirePath = "") 
+        {
+            idlePath = idleTexturePath;
+            selectPath = selectTexturePath;
+            destroyPath = destroyTexturePath;
+            createPath = createTextirePath;
+        }
 
-        #endregion
+        private Texture2D idle;
+        public Texture2D Idle =>
+            idle is null ? idle = TextureProvider.Content.Load<Texture2D>(idlePath) : idle;
 
+        private Texture2D select;
+        public Texture2D Select =>
+            select is null ? select = TextureProvider.Content.Load<Texture2D>(selectPath) : select;
+
+        private Texture2D destroy;
+        public Texture2D Destroy =>
+            destroy is null ? destroy = TextureProvider.Content.Load<Texture2D>(destroyPath) : destroy;
+
+        private Texture2D create;
+        public Texture2D Create =>
+            create is null ? create = TextureProvider.Content.Load<Texture2D>(createPath) : create;
     }
 }

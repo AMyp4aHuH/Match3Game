@@ -9,8 +9,6 @@ namespace Match3Game.Sprites
     {
         protected Texture2D foreground;
         public Vector2 PositionOnScreen;
-        protected Point currentFrame = new Point(0, 0);
-        protected Point spriteSize = new Point(1, 1);
         public float Scale = 1;
 
         public Sprite()
@@ -25,32 +23,23 @@ namespace Match3Game.Sprites
 
         /// <summary> Needed for draw on screen. </summary>
         protected Rectangle frame => new Rectangle(
-            (int)PositionOnScreen.X, 
-            (int)PositionOnScreen.Y, 
-            (int)(foreground.Width / spriteSize.X), 
-            (int)(foreground.Height / spriteSize.Y)
+            0, 
+            0, 
+            foreground.Width, 
+            foreground.Height
             );
         
         /// <summary> Needed for collision detection. </summary>
         public Rectangle Rectangle => new Rectangle(
             (int)PositionOnScreen.X, 
             (int)PositionOnScreen.Y, 
-            (int)((foreground.Width / spriteSize.X) * Scale), 
-            (int)((foreground.Height / spriteSize.Y) * Scale)
+            (int)(foreground.Width * Scale), 
+            (int)(foreground.Height * Scale)
             );
 
         public virtual void SetForeground(Texture2D texture)
         {
             foreground = texture;
-        }
-
-        /// <param name="spriteSize"> Frames count in texture. </param>
-        /// <param name="currentFrame"> Current frame for display. </param>
-        public virtual void SetForeground(Texture2D texture, Point spriteSize, Point currentFrame)
-        {
-            foreground = texture;
-            this.spriteSize = spriteSize;
-            this.currentFrame = currentFrame;
         }
 
         public virtual void DisplayOnCenterScreen()
@@ -69,26 +58,25 @@ namespace Match3Game.Sprites
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(
-                foreground, 
-                PositionOnScreen, 
-                new Rectangle(
-                    currentFrame.X * frame.Width, 
-                    currentFrame.Y * frame.Height, 
-                    frame.Width, frame.Height
-                    ), 
-                Color.White, 
-                0, 
-                Vector2.Zero, 
-                Scale, 
-                SpriteEffects.None, 
-                0
-                );
+            if (foreground != null)
+            {
+                spriteBatch.Draw(
+                    foreground,
+                    PositionOnScreen,
+                    frame,
+                    Color.White,
+                    0,
+                    Vector2.Zero,
+                    Scale,
+                    SpriteEffects.None,
+                    0
+                    );
+            }
         }
 
         public virtual void Update(int milliseconds)
         {
-
+            
         }
     }
 }

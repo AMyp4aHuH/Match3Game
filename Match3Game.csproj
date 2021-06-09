@@ -81,6 +81,10 @@
     <Compile Include="Scenes\BaseScene\Scene.cs" />
     <Compile Include="Scenes\ScenesManager.cs" />
     <Compile Include="Providers\FontProvider.cs" />
+    <Compile Include="Sprites\Animation.cs" />
+    <Compile Include="Sprites\AnimationConfig.cs" />
+    <Compile Include="Sprites\AnimationManager.cs" />
+    <Compile Include="Sprites\AnimationState.cs" />
     <Compile Include="Sprites\Sprite.cs" />
     <Compile Include="Providers\TextureProvider.cs" />
     <Compile Include="Sprites\TileSprite.cs" />
@@ -98,6 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon.ico" />
+    <Content Include="Matrix.gif" />
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
