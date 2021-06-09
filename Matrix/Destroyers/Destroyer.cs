@@ -6,23 +6,18 @@ using Match3Game.Sprites;
 
 namespace Match3Game.MatrixElements.Destroyers
 {
-    public class Destroyer : TileSprite
+    public class Destroyer : Tile
     {
         public DestroyerState State = DestroyerState.Empty;
         public Cell LastCellCollision;
 
-        public Destroyer()
-        {
-            SetForeground(TextureProvider.DestroyerTexture, new Point(4, 1), new Point(3, 0));
-        }
-       
         public override void Update(int milliseconds)
         {
             switch(State)
             {
                 case DestroyerState.Create:
                     {
-                        if (!NextCreateAnimationFrame(milliseconds))
+                        if (!animationManager.Play(AnimationState.Create ,milliseconds))
                         {
                             State = DestroyerState.Move;
                         }
@@ -30,17 +25,24 @@ namespace Match3Game.MatrixElements.Destroyers
                     }
                 case DestroyerState.Destroy:
                     {
-                        if (!NextDestroyAnimationFrame(milliseconds))
+                        if (!animationManager.Play(AnimationState.Destroy, milliseconds))
                         {
                             State = DestroyerState.Empty;
+                            animationManager.Stop();
                         }
                         break;
                     }
                 case DestroyerState.Move:
                     {
-                        if(!NextMoveAnimationFrame(milliseconds))
+                        animationManager.Play(AnimationState.Idle, milliseconds);
+
+                        if (movePositions.Count == 0)
                         {
                             State = DestroyerState.Destroy;
+                        }
+                        else
+                        {
+                            PositionOnScreen += movePositions.Dequeue();
                         }
                         break;
                     }
@@ -56,8 +58,8 @@ namespace Match3Game.MatrixElements.Destroyers
         {
             State = DestroyerState.Create;
 
-            var windthIndentInsideCell = (Matrix.CellSize - Rectangle.Width) / 2;
-            var heightIndentInsideCell = (Matrix.CellSize - Rectangle.Height) / 2;
+            var windthIndentInsideCell = (Matrix.CellSize - animationManager.Size * Scale) / 2;
+            var heightIndentInsideCell = (Matrix.CellSize - animationManager.Size * Scale) / 2;
 
             start += new Vector2(windthIndentInsideCell, heightIndentInsideCell);
             end += new Vector2(windthIndentInsideCell, heightIndentInsideCell);

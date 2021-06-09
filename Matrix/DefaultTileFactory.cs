@@ -1,4 +1,5 @@
 ﻿using Match3Game.MatrixElements.DefaultTiles;
+using Match3Game.MatrixElements.Destroyers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,6 +43,13 @@ namespace Match3Game.MatrixElements
         public override Tile CreateRandomTile(Cell cell)
         {
             Tile tile = CreateTile(TileTypes[rnd.Next(0, TileTypes.Length)], cell);
+            return tile;
+        }
+
+        public override Destroyer CreateDestoyer()
+        {
+            var tile = new BlackDestroyer();
+            tile.Scale = TileScale;
             return tile;
         }
     }

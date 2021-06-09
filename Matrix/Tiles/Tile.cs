@@ -1,23 +1,28 @@
 ﻿using Match3Game.Common;
 using Match3Game.Sprites;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Match3Game.MatrixElements
 {
-    public class Tile : TileSprite
+    public class Tile : Sprite
     {
         public TileType Type;
 
         public TileState State { get; private set; }
+        protected Queue<Vector2> movePositions = new Queue<Vector2>();
 
         /// <summary>
         /// Size Tile in pixels (tile is square).
         /// </summary>
-        public int Size => frame.Height / spriteSize.Y;
+        public int Size => animationManager.Size;
 
         public delegate void TileDestroy(object sender, TileEventArgs e);
         public event TileDestroy Destroying;
+
+        protected AnimationManager<AnimationState> animationManager;
 
         public Tile()
         {
@@ -27,8 +32,8 @@ namespace Match3Game.MatrixElements
 
         public void SetPosition(Cell position)
         {
-            var windthIndentInsideCell = (Matrix.CellSize - Rectangle.Width) / 2;
-            var heightIndentInsideCell = (Matrix.CellSize - Rectangle.Height) / 2;
+            var windthIndentInsideCell = (Matrix.CellSize - animationManager.Size * Scale) / 2;
+            var heightIndentInsideCell = (Matrix.CellSize - animationManager.Size * Scale) / 2;
 
             PositionOnScreen = new Vector2(
                 position.C * Matrix.CellSize + Matrix.WidthIndent + windthIndentInsideCell,
@@ -42,29 +47,36 @@ namespace Match3Game.MatrixElements
             {
                 case TileState.Idle:
                     {
-                        NextIdleAnimationFrame();
+                        animationManager.Play(AnimationState.Idle, elapsedTime);
                         break;
                     }
 
                 case TileState.Move:
                     {
-                        if (!NextMoveAnimationFrame(elapsedTime))
+                        animationManager.Play(AnimationState.Idle, elapsedTime);
+
+                        if (movePositions.Count == 0)
                         {
                             State = TileState.Idle;
+                        }
+                        else
+                        {
+                            PositionOnScreen += movePositions.Dequeue();
                         }
                         break;
                     }
 
                 case TileState.Select:
                     {
-                        NextSelectAnimationFrame(elapsedTime);
+                        animationManager.Play(AnimationState.Select ,elapsedTime);
                         break;
                     }     
 
                 case TileState.Destroy:
                     {
-                        if (!NextDestroyAnimationFrame(elapsedTime))
+                        if (!animationManager.Play(AnimationState.Destroy,elapsedTime))
                         {
+                            animationManager.Stop();
                             State = TileState.Empty;
                         }
                         break;
@@ -72,7 +84,7 @@ namespace Match3Game.MatrixElements
                 
                 case TileState.WaitDestroy:
                     {
-                        if (!NextWaitDestroyAnimationFrame(elapsedTime))
+                        if (!animationManager.Play(AnimationState.WaitDestroy, elapsedTime))
                         {
                             ChangeState(TileState.Destroy);
                         }
@@ -188,5 +200,66 @@ namespace Match3Game.MatrixElements
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="countTiks"> Frames count in MOVE animation. </param>
+        /// <param name="distance"> Distance in pixels. </param>
+        protected float[] FillMoveQueue(int countTiks = 20, int distance = 26)
+        {
+            if (countTiks % 2 != 0)
+            {
+                countTiks -= 1;
+            }
+
+            float[] distanceBetweenTiks = new float[countTiks];
+            for (int i = 1; i <= countTiks / 2; i++)
+            {
+                distanceBetweenTiks[i - 1] = i * i;
+            }
+
+            float sum = distanceBetweenTiks.Sum() * 2;
+
+            float coeff = distance / sum;
+
+            for (int i = 1; i <= countTiks / 2; i++)
+            {
+                distanceBetweenTiks[i - 1] *= coeff;
+                distanceBetweenTiks[countTiks - i] = distanceBetweenTiks[i - 1];
+            }
+
+            return distanceBetweenTiks;
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if(animationManager.Texture != null)
+            {
+                spriteBatch.Draw(
+                animationManager.Texture,
+                PositionOnScreen,
+                animationManager.Frame,
+                Color.White,
+                0,
+                Vector2.Zero,
+                Scale,
+                SpriteEffects.None,
+                0);
+            }
+
+            if(animationManager.DetailTexture != null)
+            {
+                spriteBatch.Draw(
+                animationManager.DetailTexture,
+                PositionOnScreen,
+                animationManager.Frame,
+                Color.White,
+                0,
+                Vector2.Zero,
+                Scale,
+                SpriteEffects.None,
+                0);
+            }
+        }
     }
 }

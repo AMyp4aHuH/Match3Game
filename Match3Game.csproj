@@ -87,7 +87,6 @@
     <Compile Include="Sprites\AnimationState.cs" />
     <Compile Include="Sprites\Sprite.cs" />
     <Compile Include="Providers\TextureProvider.cs" />
-    <Compile Include="Sprites\TileSprite.cs" />
     <Compile Include="Controls\Timer.cs" />
   </ItemGroup>
   <ItemGroup>

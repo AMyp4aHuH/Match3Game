@@ -19,7 +19,7 @@ namespace Match3Game.Scenes
 
         public override void Load(ContentManager content)
         {
-            Sprite background = new Sprite(TextureProvider.Background);
+            Sprite background = new Sprite(TextureProvider.Common.Background);
             background.DisplayOnCenterScreen();
 
             spriteFontScore = FontProvider.DefaultFont;
@@ -37,12 +37,12 @@ namespace Match3Game.Scenes
             timer = new Timer(60000);
             timer.Action += GameOver;
 
-            Sprite backgroundMatrix = new Sprite(TextureProvider.BackgroundMatrix);
+            Sprite backgroundMatrix = new Sprite(TextureProvider.Common.BackgroundMatrix);
             backgroundMatrix.Scale = 
                 (float)((Matrix.CellSize * matrix.Rows) + matrix.Rows) / backgroundMatrix.Rectangle.Height;
             backgroundMatrix.DisplayOnCenterScreen();
 
-            Sprite backgroundScore = new Sprite(TextureProvider.ScoreBackground);
+            Sprite backgroundScore = new Sprite(TextureProvider.Common.ScoreBackground);
             backgroundScore.Scale = 0.5f;
             backgroundScore.DisplayOnCenterScreen();
             backgroundScore.PositionOnScreen = new Vector2(20, backgroundScore.PositionOnScreen.Y);
@@ -79,7 +79,7 @@ namespace Match3Game.Scenes
             RemoveChild(timer);
             matrix.GameOver();
 
-            Sprite messageBackground = new Sprite(TextureProvider.MessageBoxBackground);
+            Sprite messageBackground = new Sprite(TextureProvider.Common.MessageBoxBackground);
             messageBackground.Scale = 0.5f;
             messageBackground.DisplayOnCenterScreen();
 
@@ -87,7 +87,7 @@ namespace Match3Game.Scenes
                 new SpriteFontAdapter(FontProvider.DefaultFont, Vector2.Zero, "Game Over!");
             messageSprite.DisplayOnCenterSprite(messageBackground, 5, -30);
 
-            Button buttonOk = new Button(TextureProvider.ButtonBackground, FontProvider.DefaultFont, "OK");
+            Button buttonOk = new Button(TextureProvider.Common.ButtonBackground, FontProvider.DefaultFont, "OK");
             buttonOk.Scale = 0.5f;
             buttonOk.DisplayOnCenterSprite(messageBackground, 5, 20);
             buttonOk.Click += ButtonClickOK;

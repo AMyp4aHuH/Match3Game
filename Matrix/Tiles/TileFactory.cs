@@ -16,8 +16,7 @@ namespace Match3Game.MatrixElements
 
         public Tile CreateTile(Type type, Cell cell, TileType tileType = TileType.Default)
         {
-            Tile tile = Activator.CreateInstance(type) as Tile;
-            tile.Type = tileType;
+            Tile tile = Activator.CreateInstance(type, tileType) as Tile;
             tile.Scale = TileScale;
             tile.SetPosition(cell);
             tile.Destroying += tileDestroying;
@@ -26,33 +25,25 @@ namespace Match3Game.MatrixElements
 
         public Tile CreateVerticalLineBonus(Type type, Cell cell)
         {
-            Tile tile = CreateTile(type, cell);
-            tile.Type = TileType.VerticalLine;
-            tile.SetDetail(TextureProvider.VerticaDefaultlLineTexture);
+            Tile tile = CreateTile(type, cell, TileType.VerticalLine);
+            //tile.SetDetail(TextureProvider.VerticaDefaultlLineTexture);
             return tile;
         }
 
         public Tile CreateHorizontalLineBonus(Type type, Cell cell)
         {
-            Tile tile = CreateTile(type, cell);
-            tile.Type = TileType.HorizontalLine;
-            tile.SetDetail(TextureProvider.HorizontalDefaultLineTexture);
+            Tile tile = CreateTile(type, cell, TileType.HorizontalLine);
+            //tile.SetDetail(TextureProvider.HorizontalDefaultLineTexture);
             return tile;
         }
 
         public Tile CreateBomb(Type type, Cell cell)
         {
-            Tile tile = CreateTile(type, cell);
-            tile.Type = TileType.Bomb;
-            tile.SetDetail(TextureProvider.BombDefaultTexture);
+            Tile tile = CreateTile(type, cell, TileType.Bomb);
+            //tile.SetDetail(TextureProvider.BombDefaultTexture);
             return tile;
         }
 
-        public Destroyer CreateDestoyer() 
-        {
-            var tile = new Destroyer();
-            tile.Scale = TileScale;
-            return tile;
-        }
+        public abstract Destroyer CreateDestoyer();
     }
 }
